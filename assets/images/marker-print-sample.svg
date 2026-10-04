@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none">
+  <rect width="500" height="500" fill="#ffffff"/>
+  <rect x="25" y="25" width="450" height="450" fill="none" stroke="#000" stroke-width="8"/>
+  <rect x="55" y="55" width="390" height="390" fill="#000"/>
+  <rect x="85" y="85" width="330" height="330" fill="#fff"/>
+  <polygon points="250,110 370,330 130,330" fill="#000"/>
+  <circle cx="250" cy="245" r="45" fill="#fff"/>
+  <circle cx="250" cy="245" r="22" fill="#000"/>
+  <text x="250" y="400" font-family="monospace" font-size="11" fill="#000" text-anchor="middle" font-weight="bold" letter-spacing="0.2em">
+    ARTICLE 05 · 3D MODEL TARGET
+  </text>
+</svg>

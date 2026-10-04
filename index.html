@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070707" />
+  <title>Wavelength — Edition 47 · Digital &amp; AR</title>
+  <meta name="description" content="Official digital companion for Wavelength Edition 47. Extending the printed monochrome page into immersive audiobooks, WebAR colour reveals, and 3D topological models." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+  <!-- Cinematic Ambient Layers -->
+  <div class="cinematic-vignette" aria-hidden="true"></div>
+  <canvas id="stardustCanvas" class="cinematic-dust-canvas" aria-hidden="true"></canvas>
+  <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+
+  <div class="page-container">
+    <!-- Site Header -->
+    <header class="site-header" role="banner">
+      <div class="brand-wrap">
+        <a href="index.html" aria-label="Wavelength Magazine Home">
+          <img class="brand-logo-img" src="./assets/images/logo.png" alt="Wavelength Logo" />
+        </a>
+        <span class="brand-badge dynamic-edition">Edition 47</span>
+      </div>
+
+      <div class="edition-meta">
+        <span>VFX &amp; Audio</span><br />
+        <span class="font-editorial" style="color: var(--gold); font-style: italic;">Beyond the Printed Page</span>
+      </div>
+    </header>
+
+    <!-- Main Landing Experience -->
+    <main class="landing-main" role="main">
+      <div class="hero-eyebrow-container">
+        <p class="hero-eyebrow">Digital &amp; Augmented Reality</p>
+        <div class="hero-diamond-flourish" aria-hidden="true"></div>
+      </div>
+
+      <h1 class="hero-heading gold-glow-text">
+        Beyond the <em>Printed</em> Page.
+      </h1>
+
+      <div class="hero-narrative">
+        <p class="hero-intro">
+          Our annual print edition is published in rigorous black-and-white.
+          Here, stories dissolve the boundaries of paper through <strong>narrated audiobooks</strong>,
+          <strong>chromatic spectrum reveals</strong>, and <strong>interactive 3D models</strong>.
+        </p>
+
+        <div class="hero-print-context">
+          <span class="tag">Print Companion</span>
+          <p>
+            Have your physical magazine ready. You can listen to full editorial audiobooks
+            or align your device's camera with designated figures to awaken the page.
+          </p>
+        </div>
+      </div>
+
+      <!-- Monochrome to Colour Interactive Concept Banner -->
+      <section class="monochrome-shift-banner" aria-label="Monochrome to Colour Shift Showcase">
+        <div class="shift-text-side">
+          <h3>The Chromatic Shift</h3>
+          <p>
+            Experience the central theme of Edition 47. In print, scientific concepts are captured
+            in high-contrast lithographic linework. In digital AR, the ink blooms into full bioluminescent spectrum.
+          </p>
+          <div class="shift-features">
+            <span class="shift-pill">Interactive Lithograph</span>
+            <span class="shift-pill">WebAR Tracking</span>
+            <span class="shift-pill">Bioluminescent Spectrum</span>
+          </div>
+        </div>
+
+        <!-- Interactive Split Slider -->
+        <div class="shift-preview-side" id="landingSplitBox" role="region" aria-label="Interactive Monochrome to Colour split preview">
+          <div class="split-layer split-layer-bw"></div>
+          <div class="split-layer split-layer-color"></div>
+          <div class="split-divider-line"></div>
+          <div class="split-handle-badge">Drag ↔ Reveal</div>
+        </div>
+      </section>
+
+      <!-- Primary Dual-Navigation Portal: Audiobooks vs VFX -->
+      <nav class="portal-grid" aria-label="Primary Digital Experiences">
+        <!-- Choice 1: Audiobooks -->
+        <a href="audiobooks.html" class="portal-card card-audio" aria-label="Go to Audiobook Library">
+          <div class="card-header-row">
+            <span class="card-num-badge">01 // NARRATION</span>
+            <span class="card-category-tag">5 Feature Articles</span>
+          </div>
+
+          <div class="card-art-container">
+            <div class="sound-bars-visualizer" aria-hidden="true">
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+            </div>
+          </div>
+
+          <div class="portal-card-body">
+            <h2 class="portal-card-title">Audiobooks</h2>
+            <p class="portal-card-desc">
+              Immerse yourself in author-narrated editions of this issue’s five flagship articles,
+              complete with custom waveform scrubbing and uninterrupted playback.
+            </p>
+
+            <span class="portal-btn">
+              <span>Enter Audio Library</span>
+              <span class="arrow-icon" aria-hidden="true">↗</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Choice 2: VFX Experiences -->
+        <a href="vfx.html" class="portal-card card-vfx" aria-label="Go to VFX and Augmented Reality Hub">
+          <div class="card-header-row">
+            <span class="card-num-badge">02 // AUGMENTED REALITY</span>
+            <span class="card-category-tag">MindAR Optical Engine</span>
+          </div>
+
+          <div class="card-art-container">
+            <div class="vfx-ring-visualizer" aria-hidden="true">
+              <span class="vfx-ring"></span>
+              <span class="vfx-ring"></span>
+              <span class="vfx-ring"></span>
+            </div>
+          </div>
+
+          <div class="portal-card-body">
+            <h2 class="portal-card-title">VFX Experiences</h2>
+            <p class="portal-card-desc">
+              Point your camera at the physical magazine to unlock chromatic artwork reveals
+              over black-and-white print, and project topological 3D models into your physical space.
+            </p>
+
+            <span class="portal-btn">
+              <span>Launch VFX Hub</span>
+              <span class="arrow-icon" aria-hidden="true">↗</span>
+            </span>
+          </div>
+        </a>
+      </nav>
+    </main>
+
+    <!-- Discreet Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <p class="footer-edition-text">
+        <span class="dynamic-mag-title">Wavelength</span> · <span class="dynamic-edition">Edition 47</span>.
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>

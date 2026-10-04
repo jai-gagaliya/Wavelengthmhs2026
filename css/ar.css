@@ -1,0 +1,703 @@
+/* ==========================================================================
+   WAVELENGTH VFX / AR HUB & MINDAR INTERFACE STYLES — CINEMATIC EDITION
+   Camera HUD · Reticles · Status Badges · Non-AR Simulators
+   ========================================================================== */
+
+/* Hub Section Header */
+.vfx-header-section {
+  padding: 54px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 46px;
+  position: relative;
+}
+
+.vfx-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.vfx-page-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  margin-bottom: 16px;
+}
+
+.vfx-page-intro {
+  max-width: 720px;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.85;
+}
+
+/* Experiences Two-Card Grid */
+.vfx-experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 34px;
+  margin-bottom: 68px;
+}
+
+.vfx-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(24, 22, 19, 0.88) 0%, rgba(13, 12, 11, 0.95) 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 40px 38px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  transition:
+    transform var(--transition-smooth),
+    border-color var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+}
+
+.vfx-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 28px 75px rgba(0, 0, 0, 0.7);
+}
+
+.vfx-card.card-color-reveal:hover {
+  border-color: rgba(212, 184, 150, 0.65);
+  box-shadow: 0 28px 75px rgba(212, 184, 150, 0.12), 0 0 0 1px rgba(212, 184, 150, 0.35);
+}
+
+.vfx-card.card-3d-model:hover {
+  border-color: rgba(96, 165, 250, 0.65);
+  box-shadow: 0 28px 75px rgba(96, 165, 250, 0.14), 0 0 0 1px rgba(96, 165, 250, 0.35);
+}
+
+/* Card Top Metadata */
+.vfx-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.vfx-card-num {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+}
+
+.vfx-card-target-tag {
+  font-family: "DM Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Card Visual Graphic Preview Box */
+.vfx-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: #000;
+  margin-bottom: 26px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+}
+
+.vfx-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vfx-card:hover .vfx-card-media img {
+  transform: scale(1.05);
+}
+
+/* Media Overlay Tag */
+.media-print-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(12, 11, 10, 0.9);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  backdrop-filter: blur(10px);
+}
+
+/* Titles and Editorial Context */
+.vfx-card-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+
+.vfx-card-article-ref {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.vfx-card-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 30px;
+  flex: 1;
+}
+
+/* Dual Launch Action Buttons */
+.vfx-actions-row {
+  display: flex;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.btn-launch-ar {
+  flex: 1.25;
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: var(--radius-sm);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: #080706;
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(212, 184, 150, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.btn-launch-ar:hover {
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(212, 184, 150, 0.4);
+}
+
+.vfx-card.card-3d-model .btn-launch-ar {
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  border-color: #60a5fa;
+  color: #04060c;
+  box-shadow: 0 4px 18px rgba(96, 165, 250, 0.25);
+}
+
+.vfx-card.card-3d-model .btn-launch-ar:hover {
+  box-shadow: 0 8px 28px rgba(96, 165, 250, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-preview-sim {
+  flex: 0.85;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.btn-preview-sim:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
+  color: #fff;
+}
+
+/* ==========================================================================
+   AR FULLSCREEN CAMERA VIEWPORT & HUD STAGE
+   ========================================================================== */
+
+#arContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: none;
+  overflow: hidden;
+}
+
+#arContainer.active {
+  display: block;
+}
+
+.aframe-stage-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* AR Camera HUD Overlay */
+.ar-hud-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: max(22px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right))
+           max(26px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
+}
+
+/* Top HUD Bar */
+.ar-hud-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.btn-exit-ar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: var(--radius-full);
+  background: rgba(12, 11, 10, 0.88);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  transition: all var(--transition-fast);
+}
+
+.btn-exit-ar:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(24, 12, 12, 0.95);
+  box-shadow: 0 6px 24px rgba(239, 68, 68, 0.3);
+}
+
+/* Center HUD Status Pill */
+.ar-live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  border-radius: var(--radius-full);
+  background: rgba(12, 11, 10, 0.88);
+  border: 1px solid var(--border-strong);
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+}
+
+.status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 12px #f59e0b;
+}
+
+.ar-live-status-pill.target-found .status-indicator-dot {
+  background: #34d399;
+  box-shadow: 0 0 14px #34d399;
+}
+
+.ar-live-status-pill.target-found {
+  border-color: #34d399;
+  color: #a7f3d0;
+}
+
+/* Center Scanning Guide Frame & Reticle */
+.ar-scanning-reticle-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vw, 350px);
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.ar-scanning-reticle-wrap.target-locked {
+  opacity: 0.15;
+}
+
+/* Reticle Corner Brackets */
+.reticle-bracket {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border: 2.5px solid var(--gold);
+  filter: drop-shadow(0 0 8px rgba(212, 184, 150, 0.5));
+}
+
+.bracket-tl { top: 0; left: 0; border-right: none; border-bottom: none; border-top-left-radius: 14px; }
+.bracket-tr { top: 0; right: 0; border-left: none; border-bottom: none; border-top-right-radius: 14px; }
+.bracket-bl { bottom: 0; left: 0; border-right: none; border-top: none; border-bottom-left-radius: 14px; }
+.bracket-br { bottom: 0; right: 0; border-left: none; border-top: none; border-bottom-right-radius: 14px; }
+
+/* Animated Vertical Scanning Laser Line */
+.reticle-laser-line {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  box-shadow: 0 0 16px var(--gold), 0 0 30px var(--gold);
+  animation: scanSweep 2.2s infinite ease-in-out;
+}
+
+@keyframes scanSweep {
+  0% { top: 8%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: 92%; opacity: 0; }
+}
+
+/* Bottom HUD Guide & Control Pills */
+.ar-hud-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.ar-instruction-pill {
+  background: rgba(12, 11, 10, 0.88);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 9px 24px;
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  backdrop-filter: blur(14px);
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  max-width: 90vw;
+}
+
+.ar-controls-pill-row {
+  display: flex;
+  gap: 12px;
+}
+
+.ar-util-btn {
+  background: rgba(12, 11, 10, 0.88);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+  font-family: "DM Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ar-util-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--gold);
+}
+
+/* ==========================================================================
+   NON-AR INTERACTIVE SIMULATORS / MODALS
+   ========================================================================== */
+
+.sim-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(4, 4, 3, 0.88);
+  backdrop-filter: blur(16px);
+  display: none;
+  place-items: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.sim-modal-backdrop.open {
+  display: grid;
+}
+
+.sim-modal-window {
+  width: min(100%, 740px);
+  background: linear-gradient(180deg, rgba(24, 22, 19, 0.95) 0%, rgba(13, 12, 11, 0.98) 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+}
+
+.sim-modal-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sim-modal-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.btn-close-modal {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-size: 18px;
+  transition: all var(--transition-fast);
+}
+
+.btn-close-modal:hover {
+  color: #fff;
+  border-color: var(--gold);
+  background: var(--surface-hover);
+}
+
+.sim-modal-content {
+  padding: 28px;
+}
+
+/* Simulator 1: Drag Slider Split Container */
+.interactive-slider-box {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  max-width: 480px;
+  margin: 0 auto 22px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  cursor: ew-resize;
+  user-select: none;
+  background: #000;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
+}
+
+.sim-layer {
+  position: absolute;
+  inset: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sim-layer-bw {
+  background-image: url("../assets/images/bw-print-sample.svg");
+}
+
+.sim-layer-color {
+  background-image: url("../assets/images/color-overlay-sample.svg");
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  transition: clip-path 0.04s ease-out;
+}
+
+.sim-slider-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.95), 0 0 25px var(--gold);
+  pointer-events: none;
+}
+
+.sim-slider-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(14, 13, 11, 0.95);
+  border: 1.5px solid var(--gold);
+  color: var(--gold-light);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.sim-slider-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.sim-range-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.sim-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(212, 184, 150, 0.6);
+}
+
+/* Simulator 2: 3D Canvas Orbit Viewer */
+.model-canvas-box {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: radial-gradient(circle at center, #1b202a 0%, #0b0d12 100%);
+  margin-bottom: 22px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
+}
+
+#preview3DCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.model-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.model-toolbar-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-tool {
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-tool:hover,
+.btn-tool.active {
+  border-color: #60a5fa;
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  box-shadow: 0 0 16px rgba(96, 165, 250, 0.25);
+}
+
+/* Notice / Error Toast */
+.ar-alert-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  max-width: min(90vw, 480px);
+  background: rgba(18, 17, 15, 0.96);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: none;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(14px);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ar-alert-toast.visible {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  animation: slideUpToast 0.3s ease;
+}
+
+@keyframes slideUpToast {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .vfx-experiences-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vfx-card {
+    padding: 26px 24px;
+  }
+
+  .vfx-actions-row {
+    flex-direction: column;
+  }
+}

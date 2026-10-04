@@ -1,0 +1,884 @@
+/* ==========================================================================
+   WAVELENGTH — EDITION 47 CINEMATIC DESIGN SYSTEM
+   Editorial Dark Luxury · Monochrome to Chromatic Shift
+   Inspired by Cinematic Film Lighting, Golden Ambient Glow, & Tactile 3D Depth
+   ========================================================================== */
+
+:root {
+  /* Core Cinematic Palette */
+  --bg: #070707;
+  --bg-deep: #040404;
+  --bg-soft: #0c0b0a;
+  --surface: #121110;
+  --surface-elevated: #181715;
+  --surface-hover: #1e1d1a;
+  --surface-glass: rgba(18, 17, 16, 0.72);
+
+  /* Gold & Warm Metallic Accents */
+  --gold: #d4b896;
+  --gold-light: #f5dfc2;
+  --gold-dark: #9e7f58;
+  --gold-glow: rgba(212, 184, 150, 0.2);
+  --gold-glow-subtle: rgba(212, 184, 150, 0.08);
+  --gold-rgb: 212, 184, 150;
+
+  /* Borders & Hairlines */
+  --border: rgba(212, 184, 150, 0.13);
+  --border-strong: rgba(212, 184, 150, 0.28);
+  --border-hover: rgba(212, 184, 150, 0.65);
+  --border-glow: rgba(212, 184, 150, 0.85);
+
+  /* Typography Colors */
+  --text: #f6f3eb;
+  --text-muted: #a49e92;
+  --text-dim: #635f56;
+
+  /* Chromatic VFX Spectrum */
+  --chroma-cyan: #67e8f9;
+  --chroma-blue: #60a5fa;
+  --chroma-purple: #c084fc;
+  --chroma-amber: #f59e0b;
+
+  /* Geometry & Physics */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-cinematic: 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  --container-max: 1240px;
+}
+
+/* ==========================================================================
+   RESET & FOUNDATION
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(212, 184, 150, 0.12), transparent 75%),
+    radial-gradient(circle at 85% 20%, rgba(96, 165, 250, 0.06), transparent 35rem),
+    radial-gradient(circle at 10% 80%, rgba(192, 132, 252, 0.05), transparent 30rem),
+    var(--bg);
+}
+
+/* Film Grain Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.065;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Cinematic Atmospheric Vignette */
+.cinematic-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle at 50% 45%, transparent 45%, rgba(4, 4, 3, 0.72) 95%);
+}
+
+/* Canvas for Floating Golden Ambient Dust / Stardust */
+.cinematic-dust-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Dynamic Interactive Cursor Glow Aura */
+.cursor-glow {
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 184, 150, 0.09) 0%, transparent 68%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+}
+
+.cursor-glow.active {
+  opacity: 1;
+}
+
+/* Typography Classes */
+.font-editorial {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.font-mono {
+  font-family: "DM Mono", monospace;
+}
+
+/* Glowing Headline Accent */
+.gold-glow-text {
+  text-shadow: 0 0 35px rgba(212, 184, 150, 0.45), 0 0 75px rgba(212, 184, 150, 0.2);
+}
+
+/* Accessibility Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   LAYOUT STRUCTURE
+   ========================================================================== */
+
+.page-container {
+  width: min(var(--container-max), calc(100% - 56px));
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+/* Site Header */
+header.site-header {
+  min-height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.brand-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo-img {
+  height: 42px;
+  width: auto;
+  max-width: min(270px, 52vw);
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+  transition: transform var(--transition-fast);
+}
+
+.brand-wrap:hover .brand-logo-img {
+  transform: scale(1.02);
+}
+
+.brand-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  background: rgba(212, 184, 150, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.edition-meta {
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: right;
+  line-height: 1.55;
+}
+
+/* Back Navigation Pill */
+.nav-back-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface-glass);
+  color: var(--gold-light);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-fast);
+}
+
+.nav-back-pill:hover {
+  border-color: var(--gold);
+  background: var(--surface-hover);
+  transform: translateX(-4px);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(212, 184, 150, 0.2);
+}
+
+.nav-back-pill span.arrow {
+  font-size: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.nav-back-pill:hover span.arrow {
+  transform: translateX(-3px);
+}
+
+/* ==========================================================================
+   CINEMATIC HERO SECTION
+   ========================================================================== */
+
+main.landing-main {
+  flex: 1;
+  padding: 68px 0 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-eyebrow-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero-eyebrow::before {
+  content: "";
+  width: 38px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero-diamond-flourish {
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+/* Grand Hero Title */
+.hero-heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.4rem, 8vw, 6.8rem);
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  margin-bottom: 28px;
+  max-width: 980px;
+}
+
+.hero-heading em {
+  font-style: italic;
+  color: var(--gold);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-heading em::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.6;
+}
+
+/* Narrative Grid */
+.hero-narrative {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 52px;
+  align-items: start;
+  margin-bottom: 64px;
+}
+
+.hero-intro {
+  font-size: clamp(1.05rem, 1.45vw, 1.22rem);
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.85;
+  max-width: 680px;
+}
+
+.hero-intro strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.hero-print-context {
+  background: rgba(18, 17, 15, 0.65);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 22px 26px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-print-context::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.hero-print-context p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.hero-print-context .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "DM Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+/* ==========================================================================
+   PRIMARY DUAL-NAVIGATION PORTAL CARDS (AUDIOBOOKS vs VFX)
+   Interactive 3D Tilt, Ambient Glow & Cursor Spotlight
+   ========================================================================== */
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+  margin-bottom: 56px;
+}
+
+.portal-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(175deg, rgba(24, 22, 19, 0.82) 0%, rgba(14, 13, 11, 0.92) 100%);
+  padding: 42px 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  transition:
+    transform var(--transition-smooth),
+    border-color var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+}
+
+/* Dynamic Radial Cursor Spotlight Inside Card */
+.portal-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(212, 184, 150, 0.12),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.portal-card:hover::before {
+  opacity: 1;
+}
+
+.portal-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-hover);
+}
+
+/* Card 1: Audiobooks (Golden Glow & Sound Waveforms) */
+.portal-card.card-audio:hover {
+  box-shadow: 0 28px 75px rgba(212, 184, 150, 0.1), 0 0 0 1px rgba(212, 184, 150, 0.4);
+}
+
+/* Card 2: VFX / AR (Prismatic Chromatic Aura) */
+.portal-card.card-vfx:hover {
+  box-shadow: 0 28px 75px rgba(96, 165, 250, 0.12), 0 0 0 1px rgba(96, 165, 250, 0.45);
+}
+
+/* Card Header */
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+  position: relative;
+  z-index: 2;
+}
+
+.card-num-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+}
+
+.card-category-tag {
+  font-family: "DM Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Card Art Area */
+.card-art-container {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Audio Wave Visualizer Simulation in Card */
+.sound-bars-visualizer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+}
+
+.sound-bar {
+  width: 4px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  opacity: 0.45;
+  transition: all 0.3s ease;
+}
+
+.portal-card.card-audio:hover .sound-bar {
+  opacity: 0.95;
+  animation: barPulse 1.2s ease-in-out infinite alternate;
+}
+
+.portal-card.card-audio:hover .sound-bar:nth-child(1) { animation-delay: 0.1s; height: 36px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(2) { animation-delay: 0.3s; height: 50px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(3) { animation-delay: 0.15s; height: 26px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(4) { animation-delay: 0.45s; height: 42px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(5) { animation-delay: 0.2s; height: 20px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(6) { animation-delay: 0.35s; height: 46px; }
+.portal-card.card-audio:hover .sound-bar:nth-child(7) { animation-delay: 0.05s; height: 30px; }
+
+@keyframes barPulse {
+  0% { transform: scaleY(0.35); }
+  100% { transform: scaleY(1.2); }
+}
+
+/* VFX Prismatic Shifter Ring in Card */
+.vfx-ring-visualizer {
+  position: relative;
+  width: 76px;
+  height: 76px;
+}
+
+.vfx-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(212, 184, 150, 0.35);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+
+.vfx-ring:nth-child(2) {
+  inset: 12px;
+  border-color: rgba(96, 165, 250, 0.55);
+  transform: rotate(45deg);
+}
+
+.vfx-ring:nth-child(3) {
+  inset: 22px;
+  border-color: rgba(192, 132, 252, 0.75);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.portal-card.card-vfx:hover .vfx-ring:nth-child(1) {
+  transform: scale(1.15) rotate(90deg);
+  border-color: #60a5fa;
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+.portal-card.card-vfx:hover .vfx-ring:nth-child(2) {
+  transform: rotate(180deg) scale(0.92);
+  border-color: #c084fc;
+}
+
+/* Card Content & Action Button */
+.portal-card-body {
+  position: relative;
+  z-index: 2;
+}
+
+.portal-card-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.2rem, 3.4vw, 2.85rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+
+.portal-card-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 30px;
+}
+
+.portal-btn {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.portal-btn .arrow-icon {
+  font-size: 19px;
+  transition: transform var(--transition-fast);
+}
+
+.portal-card.card-audio:hover .portal-btn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #080706;
+  box-shadow: 0 8px 25px rgba(212, 184, 150, 0.35);
+}
+
+.portal-card.card-vfx:hover .portal-btn {
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  border-color: #60a5fa;
+  color: #04060c;
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.4);
+}
+
+.portal-card:hover .portal-btn .arrow-icon {
+  transform: translate(4px, -4px);
+}
+
+/* ==========================================================================
+   INTERACTIVE MONOCHROME-TO-COLOUR HERO SHOWCASE
+   ========================================================================== */
+
+.monochrome-shift-banner {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(20, 19, 17, 0.85) 0%, rgba(12, 11, 10, 0.95) 100%);
+  padding: 36px 40px;
+  margin-bottom: 56px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.9fr);
+  gap: 44px;
+  align-items: center;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.shift-text-side h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  margin-bottom: 14px;
+}
+
+.shift-text-side p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 22px;
+}
+
+.shift-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.shift-pill {
+  font-family: "DM Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  background: rgba(212, 184, 150, 0.05);
+}
+
+/* Interactive Split Preview */
+.shift-preview-side {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: #000;
+  cursor: ew-resize;
+  user-select: none;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
+}
+
+.split-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.split-layer-bw {
+  background-image: url("../assets/images/bw-print-sample.svg");
+  filter: grayscale(100%) contrast(115%);
+}
+
+.split-layer-color {
+  background-image: url("../assets/images/color-overlay-sample.svg");
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  transition: clip-path 0.04s ease-out;
+}
+
+.split-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.9), 0 0 25px var(--gold);
+  pointer-events: none;
+}
+
+.split-handle-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(14, 13, 11, 0.95);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-full);
+  padding: 5px 13px;
+  color: var(--gold-light);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+footer.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0 42px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--text-dim);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footer-edition-text {
+  max-width: 620px;
+  line-height: 1.65;
+}
+
+.footer-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.status-dot-green {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 960px) {
+  .hero-narrative {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-bottom: 46px;
+  }
+
+  .portal-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .monochrome-shift-banner {
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+
+  .portal-card {
+    min-height: 350px;
+    padding: 34px 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-container {
+    width: min(calc(100% - 32px), var(--container-max));
+  }
+
+  header.site-header {
+    min-height: 80px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .brand-logo-img {
+    height: 34px;
+  }
+
+  .edition-meta {
+    font-size: 9px;
+  }
+
+  main.landing-main {
+    padding: 44px 0 34px;
+  }
+
+  .hero-heading {
+    font-size: clamp(2.9rem, 13vw, 4.4rem);
+  }
+
+  footer.site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

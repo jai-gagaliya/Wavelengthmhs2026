@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#090909" />
+  <title>VFX &amp; Augmented Reality Hub — Wavelength Edition 47</title>
+  <meta name="description" content="Experience image-tracking augmented reality powered by MindAR. Reveal full-colour artwork over black-and-white print and anchor 3D models to your magazine pages." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Versioned Pinned A-Frame & MindAR Dependencies -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="./css/ar.css" />
+</head>
+
+<body>
+  <!-- Cinematic Ambient Layers -->
+  <div class="cinematic-vignette" aria-hidden="true"></div>
+  <canvas id="stardustCanvas" class="cinematic-dust-canvas" aria-hidden="true"></canvas>
+  <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+
+  <div class="page-container">
+    <!-- Header with Back Link -->
+    <header class="site-header" role="banner">
+      <a href="index.html" class="nav-back-pill" aria-label="Return to Wavelength Landing Hub">
+        <span class="arrow" aria-hidden="true">←</span>
+        <span>Back to Hub</span>
+      </a>
+
+      <div class="brand-wrap">
+        <a href="index.html" aria-label="Wavelength Magazine Home">
+          <img class="brand-logo-img" src="./assets/images/logo.png" alt="Wavelength Logo" />
+        </a>
+      </div>
+
+      <div class="edition-meta">
+        <span class="dynamic-edition">Edition 47</span><br />
+        <span style="color: var(--gold);">Optical VFX &amp; AR Lab</span>
+      </div>
+    </header>
+
+    <!-- Main VFX Hub -->
+    <main role="main">
+      <section class="vfx-header-section" aria-labelledby="vfx-hub-heading">
+        <div class="vfx-header-top">
+          <p class="hero-eyebrow">WebAR Image-Tracking Engine</p>
+        </div>
+
+        <h1 id="vfx-hub-heading" class="vfx-page-title gold-glow-text">
+          Augmented Reality Experiences.
+        </h1>
+
+        <p class="vfx-page-intro">
+          Wavelength is printed in deep monochrome. Using WebAR image tracking, your camera recognises
+          printed lithographs and markers, projecting chromatic spectrums and 3D topological forms directly onto the page.
+          Camera permissions are only requested when you explicitly tap a launch button.
+        </p>
+      </section>
+
+      <!-- Two Clearly Separated Experience Cards -->
+      <section class="vfx-experiences-grid" aria-label="Augmented Reality Experiences Selection">
+        <!-- Experience 1: Black & White to Colour -->
+        <article class="vfx-card card-color-reveal" id="expCardColor">
+          <div class="vfx-card-top">
+            <span class="vfx-card-num">EXPERIENCE 01</span>
+            <span class="vfx-card-target-tag">TARGET 0 · PAGE 14</span>
+          </div>
+
+          <div class="vfx-card-media">
+            <img src="./assets/images/bw-print-sample.svg" alt="Black and white print illustration" />
+            <span class="media-print-badge">Print: Monochrome Linework</span>
+          </div>
+
+          <h2 class="vfx-card-title">From Black &amp; White to Colour</h2>
+          <p class="vfx-card-article-ref">Fig. 4.1 · Chromatic Flux Resonator</p>
+          <p class="vfx-card-desc">
+            Point your camera at the black-and-white print illustration on Page 14.
+            When recognised, the digital colour counterpart aligns seamlessly over the ink, blooming into an animated chromatic reveal.
+          </p>
+
+          <div class="vfx-actions-row">
+            <button class="btn-launch-ar" id="btnLaunchColorAR" type="button" aria-label="Launch Camera AR for Colour Reveal">
+              <span>Start Camera</span>
+            </button>
+            <button class="btn-preview-sim" id="btnSimColor" type="button" aria-label="Open Non-AR Interactive Simulator for Colour Reveal">
+              <span>Preview Simulator</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Experience 2: Explore in 3D -->
+        <article class="vfx-card card-3d-model" id="expCard3D">
+          <div class="vfx-card-top">
+            <span class="vfx-card-num">EXPERIENCE 02</span>
+            <span class="vfx-card-target-tag">TARGET 1 · PAGE 28</span>
+          </div>
+
+          <div class="vfx-card-media">
+            <img src="./assets/images/marker-print-sample.svg" alt="3D target marker printed alongside article" />
+            <span class="media-print-badge">Marker: Article 05 Anchor</span>
+          </div>
+
+          <h2 class="vfx-card-title">Explore in 3D</h2>
+          <p class="vfx-card-article-ref">Article 05 · Topological Gyro-Lattice</p>
+          <p class="vfx-card-desc">
+            Align your camera with the target marker printed beside the article on Page 28.
+            A 3D polyhedral topological crystal hovers in physical space with gyro-rings, orbital physics, and rotation controls.
+          </p>
+
+          <div class="vfx-actions-row">
+            <button class="btn-launch-ar" id="btnLaunch3dAR" type="button" aria-label="Launch Camera AR for 3D Model">
+              <span>Start Camera</span>
+            </button>
+            <button class="btn-preview-sim" id="btnSim3D" type="button" aria-label="Open Non-AR Interactive Simulator for 3D Model">
+              <span>Inspect 3D Model</span>
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Discreet Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <p class="footer-edition-text">
+        Powered by MindAR &amp; A-Frame · No external apps or app store downloads required.
+      </p>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       FULLSCREEN AR CAMERA VIEWPORT & HUD STAGE (Activated upon launch)
+       ======================================================================== -->
+  <div id="arContainer" role="dialog" aria-modal="true" aria-label="MindAR Augmented Reality Viewport">
+    <!-- Dynamic A-Frame Scene Container -->
+    <div class="aframe-stage-wrapper" id="aframeWrapper"></div>
+
+    <!-- AR HUD Overlay -->
+    <div class="ar-hud-overlay">
+      <!-- Top Control Bar -->
+      <div class="ar-hud-top">
+        <button class="btn-exit-ar" id="btnExitAR" type="button" aria-label="Exit AR Camera and return to hub">
+          <span aria-hidden="true">✕</span>
+          <span>Exit AR</span>
+        </button>
+
+        <div class="ar-live-status-pill" id="liveStatusPill" aria-live="polite">
+          <span class="status-indicator-dot" aria-hidden="true"></span>
+          <span id="liveStatusText">Initializing Camera...</span>
+        </div>
+      </div>
+
+      <!-- Scanning Reticle (Center Guide) -->
+      <div class="ar-scanning-reticle-wrap" id="scanningReticle" aria-hidden="true">
+        <span class="reticle-bracket bracket-tl"></span>
+        <span class="reticle-bracket bracket-tr"></span>
+        <span class="reticle-bracket bracket-bl"></span>
+        <span class="reticle-bracket bracket-br"></span>
+        <span class="reticle-laser-line"></span>
+      </div>
+
+      <!-- Bottom Guidance Bar -->
+      <div class="ar-hud-bottom">
+        <div class="ar-instruction-pill">
+          <span id="liveInstructionText">Align your camera over the printed magazine page</span>
+        </div>
+
+        <div class="ar-controls-pill-row">
+          <span class="ar-util-btn" id="arPageHint">Wavelength 47 · Print Companion</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       NON-AR SIMULATORS / FALLBACK MODALS (Testable on desktop without print)
+       ======================================================================== -->
+
+  <!-- Modal 1: B&W to Colour Reveal Slider -->
+  <div class="sim-modal-backdrop" id="simColorModal" role="dialog" aria-modal="true" aria-labelledby="simColorTitle">
+    <div class="sim-modal-window">
+      <div class="sim-modal-header">
+        <h3 class="sim-modal-title" id="simColorTitle">B&amp;W to Colour Reveal Simulator</h3>
+        <button class="btn-close-modal" id="btnCloseColorModal" type="button" aria-label="Close Simulator">✕</button>
+      </div>
+
+      <div class="sim-modal-content">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">
+          This interactive preview demonstrates how the physical monochrome print is augmented by the digital colour spectrum when detected by MindAR:
+        </p>
+
+        <!-- Interactive Split Comparison -->
+        <div class="interactive-slider-box" id="simColorBox" role="region" aria-label="Monochrome vs Colour interactive split">
+          <div class="sim-layer sim-layer-bw"></div>
+          <div class="sim-layer sim-layer-color"></div>
+          <div class="sim-slider-bar"></div>
+          <div class="sim-slider-knob" aria-hidden="true">↔</div>
+        </div>
+
+        <div class="sim-slider-input-row">
+          <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);">MONOCHROME PRINT</span>
+          <input class="sim-range-slider" id="simColorRange" type="range" min="0" max="100" value="50" aria-label="Adjust colour reveal percentage" />
+          <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold);">SPECTRUM REVEAL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: 3D Model Interactive Orbit Viewer -->
+  <div class="sim-modal-backdrop" id="sim3DModal" role="dialog" aria-modal="true" aria-labelledby="sim3DTitle">
+    <div class="sim-modal-window">
+      <div class="sim-modal-header">
+        <div>
+          <h3 class="sim-modal-title" id="sim3DTitle">Interactive 3D Model Viewer</h3>
+          <span style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
+            [Demo Geometry: Topological Gyro-Lattice]
+          </span>
+        </div>
+        <button class="btn-close-modal" id="btnClose3DModal" type="button" aria-label="Close 3D Viewer">✕</button>
+      </div>
+
+      <div class="sim-modal-content">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Click or touch and drag to inspect the 3D topological model in 360 degrees.
+          When your custom GLB model is uploaded to <code>assets/models/article-model.glb</code>, it will anchor to the printed marker.
+        </p>
+
+        <!-- 3D Polyhedral Orbit Canvas -->
+        <div class="model-canvas-box">
+          <canvas id="preview3DCanvas"></canvas>
+        </div>
+
+        <div class="model-viewer-toolbar">
+          <div class="model-toolbar-group">
+            <button class="btn-tool active" id="btnToggleSpin" type="button">Auto-Spin: ON</button>
+            <button class="btn-tool" id="btnToggleWire" type="button">Wireframe Mode</button>
+          </div>
+          <span style="font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--text-muted);">
+            Drag to Rotate · Pinch/Scroll to Orbit
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notice Banner -->
+  <div class="ar-alert-toast" id="arToastAlert" role="alert" aria-live="assertive">
+    <span id="arToastText">Notice text</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/ar.js"></script>
+</body>
+</html>
