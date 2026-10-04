@@ -3,164 +3,373 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#070707" />
-  <title>Wavelength — Edition 47 · Digital &amp; AR</title>
-  <meta name="description" content="Official digital companion for Wavelength Edition 47. Extending the printed monochrome page into immersive audiobooks, WebAR colour reveals, and 3D topological models." />
+  <meta name="theme-color" content="#f5f0e8" />
+  <title>Wavelength — Edition 47 · Digital &amp; AR Companion</title>
+  <meta name="description" content="Official digital and augmented-reality companion for Wavelength Edition 47. Extending the printed monochrome page through author-narrated audiobooks and MindAR optical reveals." />
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Inter (Interface & Body), Playfair Display (Editorial Display), DM Mono (Technical Specifiers) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
 
-  <!-- Stylesheets -->
+  <!-- Base & Editorial Stylesheet -->
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 
-<body>
-  <!-- Cinematic Ambient Layers -->
-  <div class="cinematic-vignette" aria-hidden="true"></div>
-  <canvas id="stardustCanvas" class="cinematic-dust-canvas" aria-hidden="true"></canvas>
-  <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
-
+<body class="editorial-body">
   <div class="page-container">
-    <!-- Site Header -->
+    
+    <!-- Editorial Masthead / Header -->
     <header class="site-header" role="banner">
-      <div class="brand-wrap">
-        <a href="index.html" aria-label="Wavelength Magazine Home">
-          <img class="brand-logo-img" src="./assets/images/logo.png" alt="Wavelength Logo" />
-        </a>
-        <span class="brand-badge dynamic-edition">Edition 47</span>
-      </div>
+      <div class="header-inner">
+        <div class="brand-lockup">
+          <a href="index.html" class="brand-link" aria-label="Wavelength Magazine Homepage">
+            <img class="brand-logo-img" src="./assets/images/logo.png" alt="Wavelength" />
+          </a>
+          <div class="edition-specifier">
+            <span class="specifier-badge dynamic-edition">Edition 47</span>
+            <span class="specifier-separator" aria-hidden="true">/</span>
+            <span class="specifier-note">Print Companion</span>
+          </div>
+        </div>
 
-      <div class="edition-meta">
-        <span>VFX &amp; Audio</span><br />
-        <span class="font-editorial" style="color: var(--gold); font-style: italic;">Beyond the Printed Page</span>
+        <!-- Desktop Editorial Utility Nav -->
+        <nav class="masthead-nav" aria-label="Issue Navigation">
+          <a href="#pathways" class="masthead-nav-link">Index</a>
+          <a href="audiobooks.html" class="masthead-nav-link">
+            <span>Audiobooks</span>
+            <span class="nav-count-badge">5</span>
+          </a>
+          <a href="vfx.html" class="masthead-nav-link">
+            <span>VFX Hub</span>
+            <span class="nav-tag-badge">AR</span>
+          </a>
+        </nav>
       </div>
     </header>
 
-    <!-- Main Landing Experience -->
-    <main class="landing-main" role="main">
-      <div class="hero-eyebrow-container">
-        <p class="hero-eyebrow">Digital &amp; Augmented Reality</p>
-        <div class="hero-diamond-flourish" aria-hidden="true"></div>
-      </div>
+    <!-- Main Content Flow -->
+    <main id="main-content" class="landing-main" role="main">
 
-      <h1 class="hero-heading gold-glow-text">
-        Beyond the <em>Printed</em> Page.
-      </h1>
+      <!-- Hero Section: Asymmetric Composition Pairing Editorial Narrative with Interactive Physical Plate -->
+      <section class="hero-section" aria-labelledby="hero-title">
+        <div class="hero-editorial-grid">
+          
+          <!-- Column A: Editorial Voice & Intentional Direction -->
+          <div class="hero-text-column">
+            <div class="hero-kicker">
+              <span class="kicker-index">VOL. 47</span>
+              <span class="kicker-dash" aria-hidden="true">—</span>
+              <span class="kicker-theme">From Monochrome Print to Living Spectrum</span>
+            </div>
 
-      <div class="hero-narrative">
-        <p class="hero-intro">
-          Our annual print edition is published in rigorous black-and-white.
-          Here, stories dissolve the boundaries of paper through <strong>narrated audiobooks</strong>,
-          <strong>chromatic spectrum reveals</strong>, and <strong>interactive 3D models</strong>.
-        </p>
+            <h1 id="hero-title" class="hero-title">
+              The printed page, dissolved into sound &amp; light.
+            </h1>
 
-        <div class="hero-print-context">
-          <span class="tag">Print Companion</span>
-          <p>
-            Have your physical magazine ready. You can listen to full editorial audiobooks
-            or align your device's camera with designated figures to awaken the page.
-          </p>
-        </div>
-      </div>
+            <p class="hero-lede">
+              Our annual issue is typeset in rigorous high-contrast monochrome. This digital companion expands the bound volume: listen to author-narrated audio essays, or align your device with printed plates to watch black-and-white ink bloom into spectrum and project interactive 3D topological forms.
+            </p>
 
-      <!-- Monochrome to Colour Interactive Concept Banner -->
-      <section class="monochrome-shift-banner" aria-label="Monochrome to Colour Shift Showcase">
-        <div class="shift-text-side">
-          <h3>The Chromatic Shift</h3>
-          <p>
-            Experience the central theme of Edition 47. In print, scientific concepts are captured
-            in high-contrast lithographic linework. In digital AR, the ink blooms into full bioluminescent spectrum.
-          </p>
-          <div class="shift-features">
-            <span class="shift-pill">Interactive Lithograph</span>
-            <span class="shift-pill">WebAR Tracking</span>
-            <span class="shift-pill">Bioluminescent Spectrum</span>
+            <!-- Dual Primary Actions (Distinct, High-Contrast, Contextual) -->
+            <div class="hero-action-group">
+              <a href="audiobooks.html" class="primary-action-card audio-action" id="actionAudio">
+                <div class="action-card-header">
+                  <span class="action-num">01</span>
+                  <span class="action-tag">Unabridged Audio</span>
+                </div>
+                <div class="action-card-content">
+                  <h2 class="action-title">The Audiobook Library</h2>
+                  <p class="action-desc">5 feature articles narrated by their authors with waveform navigation.</p>
+                </div>
+                <div class="action-card-footer">
+                  <span class="action-prompt">Listen to Articles</span>
+                  <svg class="action-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+              </a>
+
+              <a href="vfx.html" class="primary-action-card vfx-action" id="actionVfx">
+                <div class="action-card-header">
+                  <span class="action-num">02</span>
+                  <span class="action-tag">MindAR Optical Engine</span>
+                </div>
+                <div class="action-card-content">
+                  <h2 class="action-title">VFX &amp; Augmented Reality</h2>
+                  <p class="action-desc">Scan monochrome print figures for colour reveals and 3D models.</p>
+                </div>
+                <div class="action-card-footer">
+                  <span class="action-prompt">Launch Camera Hub</span>
+                  <svg class="action-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+              </a>
+            </div>
+
+            <!-- Print Reader Orientation Notice -->
+            <div class="print-companion-note">
+              <div class="note-bullet" aria-hidden="true"></div>
+              <p>
+                <strong>Holding the physical magazine?</strong> Turn to <em>Page 14 (Fig. 4.1)</em> for the colour reveal or <em>Page 28</em> for the topological 3D crystal model.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <!-- Interactive Split Slider -->
-        <div class="shift-preview-side" id="landingSplitBox" role="region" aria-label="Interactive Monochrome to Colour split preview">
-          <div class="split-layer split-layer-bw"></div>
-          <div class="split-layer split-layer-color"></div>
-          <div class="split-divider-line"></div>
-          <div class="split-handle-badge">Drag ↔ Reveal</div>
+          <!-- Column B: The Tactile Print Specimen (Interactive Monochrome-to-Color Reveal) -->
+          <div class="hero-specimen-column">
+            <div class="specimen-frame">
+              
+              <!-- Specimen Plate Header -->
+              <div class="specimen-masthead">
+                <div class="specimen-label-group">
+                  <span class="specimen-roman">PLATE IV</span>
+                  <span class="specimen-title">Fig. 4.1 · Chromatic Flux Resonator</span>
+                </div>
+                <span class="specimen-status">Interactive Preview</span>
+              </div>
+
+              <!-- Interactive Split Reveal Viewer -->
+              <div 
+                class="specimen-viewer" 
+                id="landingSplitBox" 
+                role="region" 
+                aria-label="Interactive comparison of printed monochrome linework and augmented-reality colour reveal"
+                tabindex="0"
+                aria-valuenow="50"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                <!-- Monochrome Print Layer (Base) -->
+                <div class="split-layer split-layer-bw" aria-label="Printed monochrome illustration"></div>
+                
+                <!-- Chromatic Spectrum Layer (Clipped Reveal) -->
+                <div class="split-layer split-layer-color" aria-label="Augmented reality colour reveal"></div>
+                
+                <!-- Draggable Divider Line & Badge -->
+                <div class="split-divider-line" aria-hidden="true"></div>
+                <div class="split-handle-badge" aria-hidden="true">Drag ↔ Reveal</div>
+              </div>
+
+              <!-- Specimen Explanatory Caption -->
+              <div class="specimen-caption">
+                <div class="caption-row">
+                  <span class="caption-tag">PRINT STATE</span>
+                  <span class="caption-text">High-contrast black-and-white lithograph on uncoated paper.</span>
+                </div>
+                <div class="caption-row">
+                  <span class="caption-tag">DIGITAL AR</span>
+                  <span class="caption-text">Camera detects linework and renders real-time bioluminescent spectrum.</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- Primary Dual-Navigation Portal: Audiobooks vs VFX -->
-      <nav class="portal-grid" aria-label="Primary Digital Experiences">
-        <!-- Choice 1: Audiobooks -->
-        <a href="audiobooks.html" class="portal-card card-audio" aria-label="Go to Audiobook Library">
-          <div class="card-header-row">
-            <span class="card-num-badge">01 // NARRATION</span>
-            <span class="card-category-tag">5 Feature Articles</span>
+      <!-- Section: Editorial Spread / The Two Companion Dimensions -->
+      <section id="pathways" class="editorial-pathways-section" aria-labelledby="pathways-title">
+        
+        <div class="section-title-wrap">
+          <div class="section-kicker">TWO DIGITAL DIMENSIONS</div>
+          <h2 id="pathways-title" class="section-heading">Built specifically to extend the printed issue.</h2>
+          <p class="section-subheading">Choose whether to experience this edition through author narration or through optical camera tracking.</p>
+        </div>
+
+        <!-- Pathway 01: Audiobooks Editorial Row -->
+        <article class="pathway-editorial-row" aria-labelledby="audio-pathway-title">
+          <div class="pathway-lead">
+            <div class="pathway-spec">
+              <span class="pathway-number">DIMENSION 01</span>
+              <span class="pathway-type">Spoken Word Archive</span>
+            </div>
+            <h3 id="audio-pathway-title" class="pathway-title">The Audiobook Library</h3>
+            <p class="pathway-desc">
+              Five flagship essays recorded and narrated by their authors. Every piece includes dedicated scrubbing, clear chapter timestamps, and continuous playback designed for focused reading alongside or without the physical magazine.
+            </p>
+            <div class="pathway-attributes">
+              <span class="attribute-pill">5 Feature Articles</span>
+              <span class="attribute-pill">Unabridged Audio</span>
+              <span class="attribute-pill">Author Narrations</span>
+            </div>
+            <a href="audiobooks.html" class="editorial-btn">
+              <span>Open Audiobook Library</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
           </div>
 
-          <div class="card-art-container">
-            <div class="sound-bars-visualizer" aria-hidden="true">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
+          <div class="pathway-preview-panel audio-preview-panel">
+            <div class="panel-header">
+              <span class="panel-title">Track Roster · Edition 47</span>
+              <div class="audio-waveform-mini" aria-hidden="true">
+                <span class="mini-bar"></span>
+                <span class="mini-bar"></span>
+                <span class="mini-bar"></span>
+                <span class="mini-bar"></span>
+                <span class="mini-bar"></span>
+                <span class="mini-bar"></span>
+              </div>
+            </div>
+
+            <ol class="track-listing-preview">
+              <li class="track-item">
+                <span class="track-num">01</span>
+                <div class="track-details">
+                  <span class="track-name">The Quantum Horizon: Coherence in Warm Biology</span>
+                  <span class="track-author">Dr. Elena Rostova · Quantum Biophysics</span>
+                </div>
+                <span class="track-meta">14 min</span>
+              </li>
+              <li class="track-item">
+                <span class="track-num">02</span>
+                <div class="track-details">
+                  <span class="track-name">Neuroplasticity &amp; The Synthetic Mind</span>
+                  <span class="track-author">Aria Chen &amp; Julian Sola · Neuroscience</span>
+                </div>
+                <span class="track-meta">18 min</span>
+              </li>
+              <li class="track-item">
+                <span class="track-num">03</span>
+                <div class="track-details">
+                  <span class="track-name">Echoes of the Deep Biosphere</span>
+                  <span class="track-author">Tariq Al-Mansoor · Geomicrobiology</span>
+                </div>
+                <span class="track-meta">12 min</span>
+              </li>
+              <li class="track-item">
+                <span class="track-num">04</span>
+                <div class="track-details">
+                  <span class="track-name">Gravitational Waves &amp; Spacetime Curvature</span>
+                  <span class="track-author">Prof. Kenneth Sterling · Astrophysics</span>
+                </div>
+                <span class="track-meta">16 min</span>
+              </li>
+              <li class="track-item">
+                <span class="track-num">05</span>
+                <div class="track-details">
+                  <span class="track-name">Synthetic Biology &amp; Algorithmic Genomes</span>
+                  <span class="track-author">Dr. Maya Lindqvist · Genomic Computation</span>
+                </div>
+                <span class="track-meta">15 min</span>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+        <!-- Pathway 02: VFX / AR Hub Editorial Row -->
+        <article class="pathway-editorial-row" aria-labelledby="vfx-pathway-title">
+          <div class="pathway-lead">
+            <div class="pathway-spec">
+              <span class="pathway-number">DIMENSION 02</span>
+              <span class="pathway-type">Optical Tracking Engine</span>
+            </div>
+            <h3 id="vfx-pathway-title" class="pathway-title">VFX &amp; Augmented Reality</h3>
+            <p class="pathway-desc">
+              Utilizing MindAR image tracking, your device camera anchors directly to designated figures printed on the physical page. Watch monochrome linework bloom into dynamic colour spectrum, or project interactive 3D topological models right on your desk.
+            </p>
+            <div class="pathway-attributes">
+              <span class="attribute-pill">MindAR WebAssembly</span>
+              <span class="attribute-pill">Zero Install Required</span>
+              <span class="attribute-pill">3D Gyro-Lattice</span>
+            </div>
+            <a href="vfx.html" class="editorial-btn">
+              <span>Launch VFX Camera Hub</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+          <div class="pathway-preview-panel vfx-preview-panel">
+            <div class="panel-header">
+              <span class="panel-title">Optical Target Registry</span>
+              <span class="panel-status-indicator">Camera Ready</span>
+            </div>
+
+            <div class="vfx-targets-grid">
+              
+              <!-- AR Target 1 -->
+              <div class="target-card">
+                <div class="target-meta">
+                  <span class="target-page">Page 14 · Feature Spread</span>
+                  <span class="target-id">TARGET 01</span>
+                </div>
+                <h4 class="target-name">Chromatic Linework Reveal</h4>
+                <p class="target-desc">Superimposes full bioluminescent colour emissions over the printed monochrome Fig. 4.1 lithograph.</p>
+                <div class="target-footer">
+                  <span class="target-badge">2D Optical Overlay</span>
+                </div>
+              </div>
+
+              <!-- AR Target 2 -->
+              <div class="target-card">
+                <div class="target-meta">
+                  <span class="target-page">Page 28 · Speculative Eng.</span>
+                  <span class="target-id">TARGET 02</span>
+                </div>
+                <h4 class="target-name">Topological Gyro-Lattice</h4>
+                <p class="target-desc">Anchors a rotating 3D crystal lattice model above the printed marker with multi-angle spatial inspection.</p>
+                <div class="target-footer">
+                  <span class="target-badge">3D GLB Model Anchor</span>
+                </div>
+              </div>
+
             </div>
           </div>
+        </article>
 
-          <div class="portal-card-body">
-            <h2 class="portal-card-title">Audiobooks</h2>
-            <p class="portal-card-desc">
-              Immerse yourself in author-narrated editions of this issue’s five flagship articles,
-              complete with custom waveform scrubbing and uninterrupted playback.
-            </p>
+      </section>
 
-            <span class="portal-btn">
-              <span>Enter Audio Library</span>
-              <span class="arrow-icon" aria-hidden="true">↗</span>
-            </span>
-          </div>
-        </a>
+      <!-- Section: Issue Colophon & Print Specifications -->
+      <section class="colophon-section" aria-labelledby="colophon-title">
+        <div class="colophon-header">
+          <span class="colophon-kicker">ARCHIVAL RECORD</span>
+          <h2 id="colophon-title" class="colophon-heading">Issue 47 Documentation</h2>
+        </div>
 
-        <!-- Choice 2: VFX Experiences -->
-        <a href="vfx.html" class="portal-card card-vfx" aria-label="Go to VFX and Augmented Reality Hub">
-          <div class="card-header-row">
-            <span class="card-num-badge">02 // AUGMENTED REALITY</span>
-            <span class="card-category-tag">MindAR Optical Engine</span>
+        <div class="colophon-grid">
+          <div class="colophon-block">
+            <h3 class="colophon-label">Print Publication</h3>
+            <p class="colophon-detail">Printed annually on 130gsm uncoated archival paper stock with high-density monochrome lithography.</p>
+            <span class="colophon-sub">Physical distribution: School Library &amp; Editorial Archives</span>
           </div>
 
-          <div class="card-art-container">
-            <div class="vfx-ring-visualizer" aria-hidden="true">
-              <span class="vfx-ring"></span>
-              <span class="vfx-ring"></span>
-              <span class="vfx-ring"></span>
-            </div>
+          <div class="colophon-block">
+            <h3 class="colophon-label">Digital Companion</h3>
+            <p class="colophon-detail">Built with standard web technologies. MindAR optical tracking runs entirely client-side via WebAssembly and WebRTC.</p>
+            <span class="colophon-sub">No external application or app-store install required</span>
           </div>
 
-          <div class="portal-card-body">
-            <h2 class="portal-card-title">VFX Experiences</h2>
-            <p class="portal-card-desc">
-              Point your camera at the physical magazine to unlock chromatic artwork reveals
-              over black-and-white print, and project topological 3D models into your physical space.
-            </p>
-
-            <span class="portal-btn">
-              <span>Launch VFX Hub</span>
-              <span class="arrow-icon" aria-hidden="true">↗</span>
-            </span>
+          <div class="colophon-block">
+            <h3 class="colophon-label">Editorial Roster</h3>
+            <p class="colophon-detail">Produced by the student editorial board, contributing researchers, and faculty scientific advisors.</p>
+            <span class="colophon-sub">Published under the Wavelength Editorial Board</span>
           </div>
-        </a>
-      </nav>
+        </div>
+      </section>
+
     </main>
 
-    <!-- Discreet Footer -->
+    <!-- Editorial Site Footer -->
     <footer class="site-footer" role="contentinfo">
-      <p class="footer-edition-text">
-        <span class="dynamic-mag-title">Wavelength</span> · <span class="dynamic-edition">Edition 47</span>.
-      </p>
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span class="footer-brand"><span class="dynamic-mag-title">Wavelength</span> · <span class="dynamic-edition">Edition 47</span></span>
+          <span class="footer-tagline">The official print companion for sound and augmented reality.</span>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer Navigation">
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="audiobooks.html" class="footer-link">Audiobooks</a>
+          <a href="vfx.html" class="footer-link">VFX Hub</a>
+          <a href="#main-content" class="footer-link">Back to Top ↑</a>
+        </nav>
+      </div>
+      
+      <div class="footer-subrow">
+        <p class="footer-copyright">
+          © Wavelength Magazine. All editorial essays and artworks remain the property of their respective student and faculty contributors.
+        </p>
+      </div>
     </footer>
+
   </div>
 
   <!-- Scripts -->
