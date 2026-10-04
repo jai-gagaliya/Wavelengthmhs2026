@@ -5,7 +5,10 @@
  * Implements:
  * 1. Metadata synchronization from WAVELENGTH_CONFIG
  * 2. Interactive Tactile Monochrome-to-Colour Specimen Split Slider
- *    (Mouse, Touch, and Keyboard Accessible)
+ *    - Mouse Drag & Direct Click Jump
+ *    - Touch Drag with passive listeners
+ *    - Full Keyboard Accessibility (Arrow Keys, Home, End)
+ *    - Subtle initial motion preview (respects prefers-reduced-motion)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -35,10 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (splitContainer) {
     const colorLayer = splitContainer.querySelector(".split-layer-color");
     const dividerLine = splitContainer.querySelector(".split-divider-line");
-    const handleBadge = splitContainer.querySelector(".split-handle-badge");
+    const handleThumb = splitContainer.querySelector(".split-handle-thumb");
 
     let isDragging = false;
     let currentPercentage = 50;
+    let userHasInteracted = false;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function applyPercentage(percentage) {
       currentPercentage = Math.max(0, Math.min(100, percentage));
@@ -49,21 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dividerLine) {
         dividerLine.style.left = `${currentPercentage}%`;
       }
-      if (handleBadge) {
-        handleBadge.style.left = `${currentPercentage}%`;
-        if (currentPercentage < 15) {
-          handleBadge.textContent = "Print Ink";
-        } else if (currentPercentage > 85) {
-          handleBadge.textContent = "AR Spectrum";
-        } else {
-          handleBadge.textContent = "Drag ↔ Reveal";
-        }
+      if (handleThumb) {
+        handleThumb.style.left = `${currentPercentage}%`;
       }
 
       splitContainer.setAttribute("aria-valuenow", Math.round(currentPercentage));
     }
 
     function handlePointerMove(clientX) {
+      userHasInteracted = true;
       const rect = splitContainer.getBoundingClientRect();
       const offsetX = clientX - rect.left;
       const pct = (offsetX / rect.width) * 100;
@@ -105,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Keyboard Accessibility (Arrow Left/Down to decrease, Arrow Right/Up to increase)
     splitContainer.addEventListener("keydown", (e) => {
+      userHasInteracted = true;
       let step = 5;
       if (e.shiftKey) step = 15;
 
@@ -123,7 +123,33 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Set initial percentage to 50%
+    // Initial state set to 50%
     applyPercentage(50);
+
+    // Subtle introductory hint animation after 700ms if user hasn't touched it yet
+    if (!prefersReducedMotion) {
+      setTimeout(() => {
+        if (userHasInteracted) return;
+        let start = null;
+        const duration = 1200; // ms
+
+        function stepDemo(timestamp) {
+          if (userHasInteracted) return;
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          // Ease in-out sine oscillation: 50 -> 36 -> 50
+          const oscillation = Math.sin(progress * Math.PI) * 14;
+          applyPercentage(50 - oscillation);
+
+          if (progress < 1 && !userHasInteracted) {
+            requestAnimationFrame(stepDemo);
+          } else if (!userHasInteracted) {
+            applyPercentage(50);
+          }
+        }
+
+        requestAnimationFrame(stepDemo);
+      }, 700);
+    }
   }
 });
