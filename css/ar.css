@@ -164,30 +164,39 @@
 
 /* Dual Launch Action Buttons */
 .vfx-actions-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: auto;
 }
 
-.btn-launch-ar {
-  flex: 1.2;
-  min-height: 48px;
-  padding: 0 16px;
+.btn-launch-ar,
+.btn-preview-sim {
+  height: 46px;
+  min-height: 46px;
+  padding: 0 14px;
   border-radius: var(--radius-xs);
-  background: var(--accent);
-  border: 1.5px solid var(--accent);
-  color: #ffffff;
   font-family: "DM Mono", monospace;
-  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-launch-ar {
+  background: var(--accent);
+  border: 1.5px solid var(--accent);
+  color: #ffffff;
+  font-size: 11px;
+  letter-spacing: 0.11em;
   gap: 8px;
   box-shadow: 0 2px 8px rgba(140, 94, 53, 0.25);
-  transition: all var(--transition-fast);
 }
 
 .btn-launch-ar:hover {
@@ -199,24 +208,13 @@
 }
 
 .btn-preview-sim {
-  flex: 0.95;
-  min-height: 48px;
-  padding: 0 16px;
-  border-radius: var(--radius-xs);
   background: var(--surface);
   border: 1.5px solid var(--border-strong);
   color: var(--text-primary);
-  font-family: "DM Mono", monospace;
   font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  letter-spacing: 0.08em;
   gap: 6px;
   box-shadow: var(--shadow-subtle);
-  transition: all var(--transition-fast);
 }
 
 .btn-preview-sim:hover {
@@ -696,6 +694,6 @@
   }
 
   .vfx-actions-row {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }

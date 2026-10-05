@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
 
   <!-- Base & Editorial Stylesheet -->
-  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="./css/styles.css?v=2026.11" />
 </head>
 
 <body class="editorial-body">
@@ -42,6 +42,9 @@
           <a href="#vfx-section" class="masthead-nav-link">
             <span>VFX Hub</span>
             <span class="nav-tag-badge">AR</span>
+          </a>
+          <a href="#editorial-board" class="masthead-nav-link">
+            <span>Editorial Board</span>
           </a>
           <a href="audiobooks.html" class="masthead-action-pill">
             <span>Listen Now</span>
@@ -422,31 +425,98 @@
         </div>
       </section>
 
-      <!-- Section 3: Archival Colophon & Issue Documentation -->
-      <section class="colophon-section" aria-labelledby="colophon-title">
-        <div class="colophon-header">
-          <span class="colophon-kicker">ARCHIVAL RECORD</span>
-          <h2 id="colophon-title" class="colophon-heading">Issue 47 Documentation</h2>
-        </div>
-
-        <div class="colophon-grid">
-          <div class="colophon-block">
-            <h3 class="colophon-label">Print Publication</h3>
-            <p class="colophon-detail">Typeset in high-contrast monochrome and printed on 130gsm uncoated archival stock. Published annually.</p>
-            <span class="colophon-sub">Distribution: School Library &amp; Scientific Archives</span>
+      <!-- Section 3: Editorial Board -->
+      <section id="editorial-board" class="editorial-board-section" aria-labelledby="editorial-board-title">
+        <div class="editorial-board-plate">
+          
+          <div class="editorial-board-header">
+            <span class="masthead-kicker">WAVELENGTH MAGAZINE</span>
+            <h2 id="editorial-board-title" class="masthead-main-title">EDITORIAL BOARD</h2>
+            <div class="masthead-divider-wave" aria-hidden="true">
+              <svg viewBox="0 0 320 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 6 Q 16 0, 32 6 T 64 6 T 96 6 T 128 6 T 160 6 T 192 6 T 224 6 T 256 6 T 288 6 T 320 6" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
           </div>
 
-          <div class="colophon-block">
-            <h3 class="colophon-label">Digital Companion</h3>
-            <p class="colophon-detail">Standard client-side web technologies. MindAR optical tracking runs directly inside WebAssembly and WebRTC.</p>
-            <span class="colophon-sub">No app store download or account required</span>
+          <!-- Top Centerpiece: Editor-in-Chief -->
+          <div class="masthead-lead-block">
+            <span class="masthead-role-label">EDITOR-IN-CHIEF</span>
+            <p class="masthead-lead-name">Koustabh Gupta</p>
           </div>
 
-          <div class="colophon-block">
-            <h3 class="colophon-label">Editorial Roster</h3>
-            <p class="colophon-detail">Conceived and authored by student contributors and scientific faculty advisors.</p>
-            <span class="colophon-sub">Wavelength Editorial Board · All rights reserved</span>
+          <!-- Two-Column Editorial Board Grid -->
+          <div class="masthead-columns-grid">
+            
+            <!-- Left Column -->
+            <div class="masthead-col">
+              
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">CREATIVE EDITORS</h3>
+                <ul class="masthead-names-list">
+                  <li>Gitansh Pawar</li>
+                </ul>
+              </div>
+
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">SENIOR EDITORS</h3>
+                <ul class="masthead-names-list">
+                  <li>Kushagra Gupta</li>
+                  <li>Nilesh Gupta</li>
+                  <li>Mannan Goel</li>
+                  <li>Hridaiveer S. Bhati</li>
+                </ul>
+              </div>
+
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">TEACHER-IN-CHARGE</h3>
+                <ul class="masthead-names-list">
+                  <li>Ms. Anamika Saxena</li>
+                </ul>
+              </div>
+
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">SPECIAL THANKS</h3>
+                <ul class="masthead-names-list">
+                  <li>Ms. Vandana Pathak</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <!-- Right Column -->
+            <div class="masthead-col">
+              
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">VFX ARTIST</h3>
+                <ul class="masthead-names-list">
+                  <li>Jai Gagaliya</li>
+                </ul>
+              </div>
+
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">EDITORS</h3>
+                <ul class="masthead-names-list">
+                  <li>Agastya Gupta</li>
+                  <li>Eshaan Tiwari</li>
+                  <li>Jai Gagaliya</li>
+                  <li>Vihaan Harlalka</li>
+                </ul>
+              </div>
+
+              <div class="masthead-group">
+                <h3 class="masthead-role-label">CORRESPONDENTS</h3>
+                <ul class="masthead-names-list">
+                  <li>Priyansh Baluni</li>
+                  <li>Garvit Agarwal</li>
+                  <li>Ranveer Madan</li>
+                </ul>
+              </div>
+
+            </div>
+
           </div>
+
         </div>
       </section>
 
@@ -464,21 +534,32 @@
           <a href="index.html" class="footer-link">Home</a>
           <a href="audiobooks.html" class="footer-link">Audiobooks</a>
           <a href="vfx.html" class="footer-link">VFX Hub</a>
+          <a href="#editorial-board" class="footer-link">Editorial Board</a>
           <a href="#main-content" class="footer-link">Back to Top ↑</a>
         </nav>
       </div>
       
       <div class="footer-subrow">
-        <p class="footer-copyright">
-          © Wavelength Magazine. All editorial essays, narrations, and artworks are published for educational and scientific exploration.
-        </p>
+        <div class="footer-publication-colophon">
+          <p class="pub-brand-line">Wavelength@2026</p>
+          <p class="pub-meta-line">
+            Published By : Ms. Sangeeta Kain, Principal Welham Boys’ School,<br />
+            5, Circular Road, Dalanwala, Dehradun 248001, Uttarakhand, India
+          </p>
+          <p class="pub-disclaimer-line">
+            The views in the Magazine are of the contributors and do not necessarily represent the views of the Magazine and the School.
+          </p>
+          <p class="pub-rights-line">
+            Reproduction in whole or in part without permission is strictly prohibited.
+          </p>
+        </div>
       </div>
     </footer>
 
   </div>
 
   <!-- Scripts -->
-  <script src="./js/config.js"></script>
-  <script src="./js/main.js"></script>
+  <script src="./js/config.js?v=2026.11"></script>
+  <script src="./js/main.js?v=2026.11"></script>
 </body>
 </html>
