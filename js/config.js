@@ -26,8 +26,8 @@ const WAVELENGTH_CONFIG = {
       id: "article-1",
       number: "01",
       title: "Patient Zero: Between Being 'Human' and Being 'Hero'",
-      author: "Wavelength Editorial",
-      narrator: "Official Author Narration",
+      author: "Jai Gagaliya",
+      narrator: "AI Narration",
       category: "Feature Essay",
       description:
         "An introspective exploration of the psychological and ethical boundaries between humanity and heroism, examining the moral weight carried by those thrust into the vanguard of survival.",
@@ -41,7 +41,7 @@ const WAVELENGTH_CONFIG = {
       number: "02",
       title: "Neuroplasticity & The Synthetic Mind",
       author: "Aria Chen & Julian Sola",
-      narrator: "Narrated by Dr. Priya Nair",
+      narrator: "AI Narration",
       category: "Neuroscience & AI",
       description:
         "How neuromorphic silicon architectures mimic synaptic pruning and dendritic computation to build self-healing artificial neural networks.",
@@ -55,7 +55,7 @@ const WAVELENGTH_CONFIG = {
       number: "03",
       title: "Echoes of the Deep Biosphere",
       author: "Tariq Al-Mansoor",
-      narrator: "Narrated by Liam Thorne",
+      narrator: "AI Narration",
       category: "Geomicrobiology",
       description:
         "Miles beneath oceanic crust, chemolithoautotrophic endoliths metabolize radiolytic hydrogen, rewriting the boundaries of extraterrestrial life search.",
@@ -69,7 +69,7 @@ const WAVELENGTH_CONFIG = {
       number: "04",
       title: "Gravitational Waves & Spacetime Curvature",
       author: "Prof. Kenneth Sterling",
-      narrator: "Narrated by Sarah O'Connor",
+      narrator: "AI Narration",
       category: "Astrophysics",
       description:
         "Next-generation laser interferometers measuring sub-proton spacetime strain from inspiraling binary neutron stars and primordial black holes.",
@@ -83,7 +83,7 @@ const WAVELENGTH_CONFIG = {
       number: "05",
       title: "Synthetic Biology & Algorithmic Genomes",
       author: "Dr. Maya Lindqvist",
-      narrator: "Narrated by Jordan Hayes",
+      narrator: "AI Narration",
       category: "Genomic Computation",
       description:
         "Designing synthetic genetic logic gates, cellular state machines, and DNA-based cryptographic storage for distributed biochemical processing.",

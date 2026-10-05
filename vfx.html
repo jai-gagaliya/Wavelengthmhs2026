@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#f6f1e8" />
-  <title>VFX &amp; Augmented Reality Hub — Wavelength Edition 47</title>
-  <meta name="description" content="Experience image-tracking augmented reality powered by MindAR. Reveal full-colour artwork over black-and-white print and anchor 3D models to your magazine pages." />
+  <title>VFX &amp; Augmented Reality — Wavelength Edition 47</title>
+  <meta name="description"
+    content="Experience image-tracking augmented reality powered by MindAR. Reveal full-colour artwork over black-and-white print and anchor 3D models to your magazine pages." />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
+    rel="stylesheet" />
 
   <!-- Versioned Pinned A-Frame & MindAR Dependencies -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
@@ -57,7 +61,8 @@
 
         <p class="vfx-page-intro">
           Wavelength is printed in deep monochrome. Using WebAR image tracking, your camera recognises
-          printed lithographs and markers, projecting chromatic spectrums and 3D topological forms directly onto the page.
+          printed lithographs and markers, projecting chromatic spectrums and 3D topological forms directly onto the
+          page.
           Camera permissions are only requested when you explicitly tap a launch button.
         </p>
       </section>
@@ -80,14 +85,17 @@
           <p class="vfx-card-article-ref">Article 01 · Chromatic Flux Resonator</p>
           <p class="vfx-card-desc">
             Point your camera at the black-and-white print illustration on Page 14.
-            When recognised, the digital colour counterpart aligns seamlessly over the ink, blooming into an animated chromatic reveal.
+            When recognised, the digital colour counterpart aligns seamlessly over the ink, blooming into an animated
+            chromatic reveal.
           </p>
 
           <div class="vfx-actions-row">
-            <button class="btn-launch-ar" id="btnLaunchColorAR" type="button" aria-label="Launch Camera AR for Colour Reveal">
+            <button class="btn-launch-ar" id="btnLaunchColorAR" type="button"
+              aria-label="Launch Camera AR for Colour Reveal">
               <span>Start Camera</span>
             </button>
-            <button class="btn-preview-sim" id="btnSimColor" type="button" aria-label="Open Video Preview for Colour Reveal">
+            <button class="btn-preview-sim" id="btnSimColor" type="button"
+              aria-label="Open Video Preview for Colour Reveal">
               <span>Preview Video</span>
             </button>
           </div>
@@ -109,14 +117,16 @@
           <p class="vfx-card-article-ref">Article 05 · Topological Gyro-Lattice</p>
           <p class="vfx-card-desc">
             Align your camera with the target marker printed beside the article on Page 28.
-            A 3D polyhedral topological crystal hovers in physical space with gyro-rings, orbital physics, and rotation controls.
+            A 3D polyhedral topological crystal hovers in physical space with gyro-rings, orbital physics, and rotation
+            controls.
           </p>
 
           <div class="vfx-actions-row">
             <button class="btn-launch-ar" id="btnLaunch3dAR" type="button" aria-label="Launch Camera AR for 3D Model">
               <span>Start Camera</span>
             </button>
-            <button class="btn-preview-sim" id="btnSim3D" type="button" aria-label="Open Non-AR Interactive Simulator for 3D Model">
+            <button class="btn-preview-sim" id="btnSim3D" type="button"
+              aria-label="Open Non-AR Interactive Simulator for 3D Model">
               <span>Inspect 3D Model</span>
             </button>
           </div>
@@ -128,7 +138,8 @@
     <footer class="site-footer" role="contentinfo">
       <div class="footer-inner">
         <div class="footer-left">
-          <span class="footer-brand"><span class="dynamic-mag-title">Wavelength</span> · <span class="dynamic-edition">Edition 47</span></span>
+          <span class="footer-brand"><span class="dynamic-mag-title">Wavelength</span> · <span
+              class="dynamic-edition">Edition 47</span></span>
           <span class="footer-tagline">Powered by MindAR &amp; A-Frame · Optical VFX &amp; AR Lab.</span>
         </div>
 
@@ -140,7 +151,7 @@
           <a href="#vfx-hub-heading" class="footer-link">Back to Top ↑</a>
         </nav>
       </div>
-      
+
       <div class="footer-subrow">
         <div class="footer-publication-colophon">
           <p class="pub-brand-line">Wavelength@2026</p>
@@ -149,7 +160,8 @@
             5, Circular Road, Dalanwala, Dehradun 248001, Uttarakhand, India
           </p>
           <p class="pub-disclaimer-line">
-            The views in the Magazine are of the contributors and do not necessarily represent the views of the Magazine and the School.
+            The views in the Magazine are of the contributors and do not necessarily represent the views of the Magazine
+            and the School.
           </p>
           <p class="pub-rights-line">
             Reproduction in whole or in part without permission is strictly prohibited.
@@ -213,28 +225,25 @@
       <div class="sim-modal-header">
         <div>
           <h3 class="sim-modal-title" id="simColorTitle">Chromatic Video Reveal Preview</h3>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
+          <span
+            style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
             [Digital Companion Video: wavy.mp4]
           </span>
         </div>
-        <button class="btn-close-modal" id="btnCloseColorModal" type="button" aria-label="Close Video Preview">✕</button>
+        <button class="btn-close-modal" id="btnCloseColorModal" type="button"
+          aria-label="Close Video Preview">✕</button>
       </div>
 
       <div class="sim-modal-content">
         <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-          Preview the chromatic motion video overlay that blooms over the monochrome engraving on Page 14 when scanned with the WebAR camera:
+          Preview the chromatic motion video overlay that blooms over the monochrome engraving on Page 14 when scanned
+          with the WebAR camera:
         </p>
 
         <!-- Video Player Preview Frame -->
         <div class="video-preview-box" id="simVideoContainer">
-          <video
-            id="simVideoPlayer"
-            src="./assets/videos/wavy.mp4"
-            playsinline
-            loop
-            preload="metadata"
-            class="sim-video-element"
-            aria-label="Wavelength wavy.mp4 chromatic video preview">
+          <video id="simVideoPlayer" src="./assets/videos/wavy.mp4" playsinline loop preload="metadata"
+            class="sim-video-element" aria-label="Wavelength wavy.mp4 chromatic video preview">
           </video>
           <button class="video-overlay-play-btn" id="simVideoPlayOverlayBtn" type="button" aria-label="Play video">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -245,15 +254,8 @@
 
         <!-- Video Scrubber Progress Row -->
         <div class="video-scrubber-row">
-          <input
-            type="range"
-            class="video-scrubber-slider"
-            id="videoTimelineSlider"
-            min="0"
-            max="100"
-            value="0"
-            step="0.1"
-            aria-label="Seek video position" />
+          <input type="range" class="video-scrubber-slider" id="videoTimelineSlider" min="0" max="100" value="0"
+            step="0.1" aria-label="Seek video position" />
         </div>
 
         <div class="video-viewer-toolbar">
@@ -272,7 +274,8 @@
             </button>
           </div>
           <div class="video-meta-info">
-            <span id="videoTimeDisplay" style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);">
+            <span id="videoTimeDisplay"
+              style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);">
               0:00 / 0:00
             </span>
           </div>
@@ -287,7 +290,8 @@
       <div class="sim-modal-header">
         <div>
           <h3 class="sim-modal-title" id="sim3DTitle">Interactive 3D Model Viewer</h3>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
+          <span
+            style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
             [Active 3D Model: article-model.glb]
           </span>
         </div>
@@ -328,4 +332,5 @@
   <script src="./js/main.js?v=2026.13"></script>
   <script src="./js/ar.js?v=2026.13"></script>
 </body>
+
 </html>

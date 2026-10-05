@@ -1,7 +1,7 @@
 # Wavelength — Edition 47
 ## Digital & Augmented Reality Magazine Companion
 
-A digital extension for the physical print edition of **Wavelength Magazine**. The print edition is published in monochrome; this web platform extends the reading experience into author-narrated audiobooks, WebAR colour reveals, and interactive 3D models.
+A digital extension for the physical print edition of **Wavelength Magazine**. The print edition is published in monochrome; this web platform extends the reading experience into AI-narrated audiobooks, WebAR colour reveals, and interactive 3D models.
 
 ---
 
@@ -84,14 +84,14 @@ Currently, 5 sample audio files (`article-1.wav` through `article-5.wav`) are in
    {
      id: "article-1",
      number: "01",
-     title: "The Quantum Horizon: Coherence in Warm Biology",
-     author: "Dr. Elena Rostova",
-     narrator: "Narrated by Marcus Vance",
-     category: "Quantum Biophysics",
+     title: "Patient Zero: Between Being 'Human' and Being 'Hero'",
+     author: "Jai Gagaliya",
+     narrator: "AI Narration",
+     category: "Feature Essay",
      description: "Your editorial synopsis...",
-     audioSrc: "./assets/audio/quantum-horizon.mp3", // <-- Update path here
+     audioSrc: "./assets/audio/patient-zero.mp3", // <-- Update path here
      coverImage: "./assets/images/covers/cover-1.svg",
-     tag: "Feature Article"
+     tag: "Feature Essay · Unabridged"
    }
    ```
 4. The custom player will automatically parse duration metadata, update timestamps, and synchronize seeking.
