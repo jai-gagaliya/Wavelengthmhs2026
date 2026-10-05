@@ -4,11 +4,12 @@
  *
  * Implements:
  * 1. Metadata synchronization from WAVELENGTH_CONFIG
- * 2. Interactive Tactile Monochrome-to-Colour Specimen Split Slider
- *    - Mouse Drag & Direct Click Jump
- *    - Touch Drag with passive listeners
- *    - Full Keyboard Accessibility (Arrow Keys, Home, End)
- *    - Subtle initial motion preview (respects prefers-reduced-motion)
+ * 2. High-Performance Tactile Specimen Split Slider:
+ *    - Modern Pointer Events API with setPointerCapture (zero stutter, zero mouse drift)
+ *    - requestAnimationFrame batched updates for silky 60fps/120fps display refresh
+ *    - Touch-action: none to eliminate mobile scroll conflicts
+ *    - Full Keyboard Accessibility (Arrow Keys, Home, End, PageUp, PageDown)
+ *    - Smooth easing introductory preview
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================================================
-  // 2. TACTILE MONOCHROME-TO-COLOUR SPECIMEN SPLIT SLIDER
+  // 2. HIGH-PERFORMANCE TACTILE SPECIMEN SPLIT SLIDER
   // ==========================================================================
   const splitContainer = document.getElementById("landingSplitBox");
   if (splitContainer) {
@@ -40,116 +41,169 @@ document.addEventListener("DOMContentLoaded", () => {
     const dividerLine = splitContainer.querySelector(".split-divider-line");
     const handleThumb = splitContainer.querySelector(".split-handle-thumb");
 
-    let isDragging = false;
+    let isPointerDown = false;
     let currentPercentage = 50;
+    let targetPercentage = 50;
+    let rAFId = null;
     let userHasInteracted = false;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    function applyPercentage(percentage) {
-      currentPercentage = Math.max(0, Math.min(100, percentage));
+    // Render visual state directly without CSS transition lag
+    function renderPosition(pct) {
+      currentPercentage = Math.max(0, Math.min(100, pct));
+      const rounded = Math.round(currentPercentage * 10) / 10;
 
       if (colorLayer) {
-        colorLayer.style.clipPath = `polygon(0 0, ${currentPercentage}% 0, ${currentPercentage}% 100%, 0 100%)`;
+        colorLayer.style.clipPath = `polygon(0 0, ${rounded}% 0, ${rounded}% 100%, 0 100%)`;
       }
       if (dividerLine) {
-        dividerLine.style.left = `${currentPercentage}%`;
+        dividerLine.style.left = `${rounded}%`;
       }
       if (handleThumb) {
-        handleThumb.style.left = `${currentPercentage}%`;
+        handleThumb.style.left = `${rounded}%`;
       }
 
       splitContainer.setAttribute("aria-valuenow", Math.round(currentPercentage));
     }
 
-    function handlePointerMove(clientX) {
-      userHasInteracted = true;
-      const rect = splitContainer.getBoundingClientRect();
-      const offsetX = clientX - rect.left;
-      const pct = (offsetX / rect.width) * 100;
-      applyPercentage(pct);
+    // Schedule render via requestAnimationFrame for perfect screen synchronization
+    function queueRender(pct) {
+      targetPercentage = Math.max(0, Math.min(100, pct));
+      if (!rAFId) {
+        rAFId = requestAnimationFrame(() => {
+          renderPosition(targetPercentage);
+          rAFId = null;
+        });
+      }
     }
 
-    // Mouse Interaction
-    splitContainer.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      splitContainer.focus();
-      handlePointerMove(e.clientX);
-    });
+    function calculatePercentFromPointer(clientX) {
+      const rect = splitContainer.getBoundingClientRect();
+      if (rect.width === 0) return 50;
+      const offsetX = clientX - rect.left;
+      return (offsetX / rect.width) * 100;
+    }
 
-    window.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      handlePointerMove(e.clientX);
-    });
+    // Modern Pointer Events API (handles mouse, pen, and touch identically)
+    splitContainer.addEventListener("pointerdown", (e) => {
+      userHasInteracted = true;
+      isPointerDown = true;
+      splitContainer.classList.add("is-dragging");
 
-    window.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
-
-    // Touch Interaction
-    splitContainer.addEventListener("touchstart", (e) => {
-      if (e.touches.length > 0) {
-        isDragging = true;
-        handlePointerMove(e.touches[0].clientX);
+      // Lock pointer capture to container so fast mouse gestures never drop
+      try {
+        splitContainer.setPointerCapture(e.pointerId);
+      } catch (err) {
+        // Fallback gracefully if setPointerCapture unsupported
       }
-    }, { passive: true });
 
-    window.addEventListener("touchmove", (e) => {
-      if (!isDragging || e.touches.length === 0) return;
-      handlePointerMove(e.touches[0].clientX);
-    }, { passive: true });
-
-    window.addEventListener("touchend", () => {
-      isDragging = false;
+      const pct = calculatePercentFromPointer(e.clientX);
+      renderPosition(pct);
     });
 
-    // Keyboard Accessibility (Arrow Left/Down to decrease, Arrow Right/Up to increase)
+    splitContainer.addEventListener("pointermove", (e) => {
+      if (!isPointerDown) return;
+      userHasInteracted = true;
+      const pct = calculatePercentFromPointer(e.clientX);
+      queueRender(pct);
+    });
+
+    function endPointerDrag(e) {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      splitContainer.classList.remove("is-dragging");
+
+      try {
+        if (e && e.pointerId && splitContainer.hasPointerCapture(e.pointerId)) {
+          splitContainer.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {
+        // Fallback
+      }
+    }
+
+    splitContainer.addEventListener("pointerup", endPointerDrag);
+    splitContainer.addEventListener("pointercancel", endPointerDrag);
+
+    // Keyboard Accessibility (Arrow Keys, Home, End, PageUp, PageDown)
     splitContainer.addEventListener("keydown", (e) => {
       userHasInteracted = true;
-      let step = 5;
-      if (e.shiftKey) step = 15;
+      let step = 4;
+      if (e.shiftKey) step = 12;
+
+      let newPct = currentPercentage;
 
       if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
         e.preventDefault();
-        applyPercentage(currentPercentage - step);
+        newPct -= step;
       } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
         e.preventDefault();
-        applyPercentage(currentPercentage + step);
+        newPct += step;
+      } else if (e.key === "PageDown") {
+        e.preventDefault();
+        newPct -= 20;
+      } else if (e.key === "PageUp") {
+        e.preventDefault();
+        newPct += 20;
       } else if (e.key === "Home") {
         e.preventDefault();
-        applyPercentage(0);
+        newPct = 0;
       } else if (e.key === "End") {
         e.preventDefault();
-        applyPercentage(100);
+        newPct = 100;
+      } else {
+        return;
       }
+
+      renderPosition(newPct);
     });
 
-    // Initial state set to 50%
-    applyPercentage(50);
+    // Set initial 50% state immediately
+    renderPosition(50);
 
-    // Subtle introductory hint animation after 700ms if user hasn't touched it yet
+    // Subtle organic hint demonstration after 800ms (only if untouched & reduced-motion is false)
     if (!prefersReducedMotion) {
       setTimeout(() => {
         if (userHasInteracted) return;
-        let start = null;
-        const duration = 1200; // ms
+        let startTime = null;
+        const animDuration = 1400; // ms
 
-        function stepDemo(timestamp) {
+        function runDemo(now) {
           if (userHasInteracted) return;
-          if (!start) start = timestamp;
-          const progress = Math.min((timestamp - start) / duration, 1);
-          // Ease in-out sine oscillation: 50 -> 36 -> 50
-          const oscillation = Math.sin(progress * Math.PI) * 14;
-          applyPercentage(50 - oscillation);
+          if (!startTime) startTime = now;
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / animDuration, 1);
+
+          // Smooth sine curve: 50% -> 38% -> 50%
+          const offset = Math.sin(progress * Math.PI) * 12;
+          renderPosition(50 - offset);
 
           if (progress < 1 && !userHasInteracted) {
-            requestAnimationFrame(stepDemo);
+            requestAnimationFrame(runDemo);
           } else if (!userHasInteracted) {
-            applyPercentage(50);
+            renderPosition(50);
           }
         }
 
-        requestAnimationFrame(stepDemo);
-      }, 700);
+        requestAnimationFrame(runDemo);
+      }, 800);
     }
   }
+
+  // Smooth scroll links handler
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      const targetId = this.getAttribute("href");
+      if (targetId === "#") return;
+      const targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Update URL hash without jumping
+        if (history.pushState) {
+          history.pushState(null, null, targetId);
+        }
+      }
+    });
+  });
 });

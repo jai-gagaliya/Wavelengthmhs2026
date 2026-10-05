@@ -311,45 +311,88 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Scrubber seeking calculations
-    function seekToPosition(clientX) {
-      if (!audio.duration) return;
-      const rect = scrubberTrack.getBoundingClientRect();
-      let clickPos = (clientX - rect.left) / rect.width;
-      clickPos = Math.max(0, Math.min(1, clickPos));
-      audio.currentTime = clickPos * audio.duration;
-      fillBar.style.width = `${clickPos * 100}%`;
-      thumb.style.left = `${clickPos * 100}%`;
-      timeElapsed.textContent = formatTime(audio.currentTime);
+    // High-performance pointer scrubber with rAF batching and non-stuttering seek commit
+    let scrubTargetPct = 0;
+    let scrubRafId = null;
+
+    function renderScrubUI(pct) {
+      pct = Math.max(0, Math.min(1, pct));
+      fillBar.style.width = `${pct * 100}%`;
+      thumb.style.left = `${pct * 100}%`;
+      const time = (audio.duration || 0) * pct;
+      timeElapsed.textContent = formatTime(time);
+      scrubberTrack.setAttribute("aria-valuenow", Math.round(pct * 100));
     }
 
-    scrubberTrack.addEventListener("mousedown", (e) => {
+    function handlePointerMove(e) {
+      if (!isScrubbing || !audio.duration) return;
+      const rect = scrubberTrack.getBoundingClientRect();
+      if (rect.width <= 0) return;
+      scrubTargetPct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+
+      if (scrubRafId) cancelAnimationFrame(scrubRafId);
+      scrubRafId = requestAnimationFrame(() => {
+        renderScrubUI(scrubTargetPct);
+      });
+    }
+
+    function handlePointerDown(e) {
+      if (!audio.duration) return;
       isScrubbing = true;
-      seekToPosition(e.clientX);
-    });
+      try {
+        scrubberTrack.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      const rect = scrubberTrack.getBoundingClientRect();
+      scrubTargetPct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      renderScrubUI(scrubTargetPct);
+    }
 
-    window.addEventListener("mousemove", (e) => {
+    function handlePointerUp(e) {
       if (!isScrubbing) return;
-      seekToPosition(e.clientX);
-    });
-
-    window.addEventListener("mouseup", () => {
       isScrubbing = false;
-    });
+      try {
+        if (scrubberTrack.hasPointerCapture(e.pointerId)) {
+          scrubberTrack.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
 
-    // Touch scrubbing for mobile
-    scrubberTrack.addEventListener("touchstart", (e) => {
-      isScrubbing = true;
-      if (e.touches.length > 0) seekToPosition(e.touches[0].clientX);
-    }, { passive: true });
+      if (scrubRafId) cancelAnimationFrame(scrubRafId);
+      if (audio.duration) {
+        audio.currentTime = scrubTargetPct * audio.duration;
+      }
+    }
 
-    window.addEventListener("touchmove", (e) => {
-      if (!isScrubbing) return;
-      if (e.touches.length > 0) seekToPosition(e.touches[0].clientX);
-    }, { passive: true });
+    scrubberTrack.style.touchAction = "none";
+    scrubberTrack.addEventListener("pointerdown", handlePointerDown);
+    scrubberTrack.addEventListener("pointermove", handlePointerMove);
+    scrubberTrack.addEventListener("pointerup", handlePointerUp);
+    scrubberTrack.addEventListener("pointercancel", handlePointerUp);
 
-    window.addEventListener("touchend", () => {
-      isScrubbing = false;
+    // Keyboard accessibility for scrubber
+    scrubberTrack.addEventListener("keydown", (e) => {
+      if (!audio.duration) return;
+      let newTime = audio.currentTime;
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+        e.preventDefault();
+        newTime = Math.min(audio.duration, newTime + 5);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+        e.preventDefault();
+        newTime = Math.max(0, newTime - 5);
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        newTime = 0;
+      } else if (e.key === "End") {
+        e.preventDefault();
+        newTime = audio.duration;
+      } else {
+        return;
+      }
+      audio.currentTime = newTime;
+      const pct = (newTime / audio.duration) * 100;
+      fillBar.style.width = `${pct}%`;
+      thumb.style.left = `${pct}%`;
+      timeElapsed.textContent = formatTime(newTime);
+      scrubberTrack.setAttribute("aria-valuenow", Math.round(pct));
     });
 
     // Volume & Mute Controls

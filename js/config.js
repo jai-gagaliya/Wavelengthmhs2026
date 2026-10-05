@@ -48,7 +48,7 @@ const WAVELENGTH_CONFIG = {
       audioSrc: "./assets/audio/article-2.wav",
       coverImage: "./assets/images/covers/cover-2.svg",
       tag: "Cover Story",
-      accentColor: "#76b8d8"
+      accentColor: "#d97746"
     },
     {
       id: "article-3",
@@ -76,7 +76,7 @@ const WAVELENGTH_CONFIG = {
       audioSrc: "./assets/audio/article-4.wav",
       coverImage: "./assets/images/covers/cover-4.svg",
       tag: "Theoretical Physics",
-      accentColor: "#bd8ce5"
+      accentColor: "#c5913e"
     },
     {
       id: "article-5",
@@ -154,7 +154,7 @@ const WAVELENGTH_CONFIG = {
       slowRotate: true,
       rotationSpeed: 0.35, // degrees per frame
       supportsAnimation: true,
-      accentColor: "#76b8d8"
+      accentColor: "#8c5e35"
     }
   }
 };

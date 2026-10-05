@@ -634,9 +634,15 @@ header.site-header {
   border-radius: var(--radius-xs);
   overflow: hidden;
   background: #ffffff;
-  cursor: ew-resize;
+  cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
   box-shadow: inset 0 0 12px rgba(30, 22, 18, 0.05);
+}
+
+.specimen-viewer.is-dragging {
+  cursor: grabbing;
 }
 
 .specimen-viewer:focus-visible {
@@ -647,9 +653,12 @@ header.site-header {
 .split-layer {
   position: absolute;
   inset: 0;
-  background-size: contain;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .split-layer-bw {
@@ -660,7 +669,7 @@ header.site-header {
 .split-layer-color {
   background-image: url("../assets/images/color-overlay-sample.svg");
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
-  transition: clip-path 0.03s linear;
+  will-change: clip-path;
 }
 
 .split-divider-line {
@@ -672,6 +681,7 @@ header.site-header {
   background: var(--text-primary);
   pointer-events: none;
   box-shadow: 0 0 8px rgba(30, 22, 18, 0.25);
+  will-change: left;
 }
 
 /* Sleek Circular Brass Thumb That Does NOT Obscure Center Artwork */
@@ -691,11 +701,19 @@ header.site-header {
   justify-content: center;
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(30, 22, 18, 0.35);
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+  will-change: left, transform;
 }
 
 .specimen-viewer:hover .split-handle-thumb {
   transform: translate(-50%, -50%) scale(1.08);
+}
+
+.specimen-viewer.is-dragging .split-handle-thumb {
+  transform: translate(-50%, -50%) scale(1.14);
+  background: var(--accent);
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(30, 22, 18, 0.45);
 }
 
 /* Pinned Corner Badges */
@@ -771,6 +789,13 @@ header.site-header {
 /* ==========================================================================
    SECTION 1: THE AUDIOBOOK LIBRARY (DETAILED ARTICLE SHOWCASE)
    ========================================================================== */
+
+.editorial-section,
+#audio-section,
+#vfx-section,
+#main-content {
+  scroll-margin-top: 36px;
+}
 
 .editorial-section {
   padding: 68px 0 60px;

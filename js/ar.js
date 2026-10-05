@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // High-tech procedural topological crystal structure
       const demoCore = document.createElement("a-dodecahedron");
       demoCore.setAttribute("radius", "0.8");
-      demoCore.setAttribute("material", "color: #76b8d8; roughness: 0.1; metalness: 0.9; wireframe: false");
+      demoCore.setAttribute("material", "color: #8c5e35; roughness: 0.15; metalness: 0.85; wireframe: false");
 
       const demoRing1 = document.createElement("a-torus");
       demoRing1.setAttribute("radius", "1.2");
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
       demoRing2.setAttribute("radius", "1.4");
       demoRing2.setAttribute("radius-tubular", "0.02");
       demoRing2.setAttribute("rotation", "-45 45 0");
-      demoRing2.setAttribute("material", "color: #bd8ce5; metalness: 0.9; roughness: 0.1");
+      demoRing2.setAttribute("material", "color: #c5913e; metalness: 0.9; roughness: 0.15");
 
       modelContainer.appendChild(demoCore);
       modelContainer.appendChild(demoRing1);
@@ -332,10 +332,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow = "";
   }
 
-  // Exit Buttons & Keyboard Escape
+  // Exit Buttons & Keyboard Escape / Modal dismissals
   if (btnExitAR) btnExitAR.addEventListener("click", exitAR);
+
+  // Close modals on backdrop click
+  [simColorModal, sim3DModal].forEach((modal) => {
+    if (!modal) return;
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("open");
+        if (modal === sim3DModal && sim3DAnimId) {
+          cancelAnimationFrame(sim3DAnimId);
+          sim3DAnimId = null;
+        }
+      }
+    });
+  });
+
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isARActive) exitAR();
+    if (e.key === "Escape") {
+      if (isARActive) exitAR();
+      if (simColorModal && simColorModal.classList.contains("open")) {
+        simColorModal.classList.remove("open");
+      }
+      if (sim3DModal && sim3DModal.classList.contains("open")) {
+        sim3DModal.classList.remove("open");
+        if (sim3DAnimId) {
+          cancelAnimationFrame(sim3DAnimId);
+          sim3DAnimId = null;
+        }
+      }
+    }
   });
 
   // Launch Button Triggers
@@ -363,6 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  let simColorInitialized = false;
   function initSimColorSlider() {
     const box = document.getElementById("simColorBox");
     const range = document.getElementById("simColorRange");
@@ -372,7 +400,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const bar = box.querySelector(".sim-slider-bar");
     const knob = box.querySelector(".sim-slider-knob");
 
-    function setPercent(pct) {
+    let simColorRafId = null;
+
+    function applyPercent(pct) {
       pct = Math.max(0, Math.min(100, pct));
       if (layerColor) layerColor.style.clipPath = `polygon(0 0, ${pct}% 0, ${pct}% 100%, 0 100%)`;
       if (bar) bar.style.left = `${pct}%`;
@@ -380,46 +410,60 @@ document.addEventListener("DOMContentLoaded", () => {
       if (range) range.value = pct;
     }
 
-    if (range) {
-      range.addEventListener("input", (e) => {
-        setPercent(e.target.value);
+    function setPercent(pct) {
+      if (simColorRafId) cancelAnimationFrame(simColorRafId);
+      simColorRafId = requestAnimationFrame(() => {
+        applyPercent(pct);
       });
     }
 
-    // Direct drag on the box
+    if (simColorInitialized) {
+      applyPercent(50);
+      return;
+    }
+    simColorInitialized = true;
+
+    if (range) {
+      range.addEventListener("input", (e) => {
+        setPercent(parseFloat(e.target.value));
+      });
+    }
+
+    // Modern Pointer Events for high-framerate, non-stuttering drag
+    box.style.touchAction = "none";
     let isDragging = false;
-    box.addEventListener("mousedown", (e) => {
+
+    function getPercentFromPointer(e) {
+      const rect = box.getBoundingClientRect();
+      if (rect.width <= 0) return 50;
+      return Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+    }
+
+    box.addEventListener("pointerdown", (e) => {
       isDragging = true;
-      const rect = box.getBoundingClientRect();
-      setPercent(((e.clientX - rect.left) / rect.width) * 100);
-    });
-    window.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      const rect = box.getBoundingClientRect();
-      setPercent(((e.clientX - rect.left) / rect.width) * 100);
-    });
-    window.addEventListener("mouseup", () => {
-      isDragging = false;
+      try {
+        box.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      setPercent(getPercentFromPointer(e));
     });
 
-    // Touch support
-    box.addEventListener("touchstart", (e) => {
-      isDragging = true;
-      if (e.touches.length > 0) {
-        const rect = box.getBoundingClientRect();
-        setPercent(((e.touches[0].clientX - rect.left) / rect.width) * 100);
-      }
-    }, { passive: true });
-    window.addEventListener("touchmove", (e) => {
+    box.addEventListener("pointermove", (e) => {
       if (!isDragging) return;
-      if (e.touches.length > 0) {
-        const rect = box.getBoundingClientRect();
-        setPercent(((e.touches[0].clientX - rect.left) / rect.width) * 100);
-      }
-    }, { passive: true });
-    window.addEventListener("touchend", () => {
-      isDragging = false;
+      setPercent(getPercentFromPointer(e));
     });
+
+    function endDrag(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      try {
+        if (box.hasPointerCapture(e.pointerId)) {
+          box.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
+    }
+
+    box.addEventListener("pointerup", endDrag);
+    box.addEventListener("pointercancel", endDrag);
   }
 
   // Simulator 2: 3D Model Canvas Orbit Viewer
@@ -432,12 +476,21 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose3DModal && sim3DModal) {
     btnClose3DModal.addEventListener("click", () => {
       sim3DModal.classList.remove("open");
+      if (sim3DAnimId) {
+        cancelAnimationFrame(sim3DAnimId);
+        sim3DAnimId = null;
+      }
     });
   }
 
   // Pure Vanilla Canvas 3D Topological Crystal Rendering Engine
   let sim3DAnimId = null;
   function initSim3DViewer() {
+    if (sim3DAnimId) {
+      cancelAnimationFrame(sim3DAnimId);
+      sim3DAnimId = null;
+    }
+
     const canvas = document.getElementById("preview3DCanvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -472,8 +525,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let rotX = 0.4, rotY = 0.6;
     let autoSpin = true;
     let wireframeOnly = false;
-    let isMouseDown = false;
-    let lastMouseX = 0, lastMouseY = 0;
+    let isPointerDown = false;
+    let lastPointerX = 0, lastPointerY = 0;
 
     // Toolbar controls
     const btnSpin = document.getElementById("btnToggleSpin");
@@ -492,56 +545,51 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
 
-    // Drag interaction
-    canvas.onmousedown = (e) => {
-      isMouseDown = true;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
+    // High performance Pointer drag interaction
+    canvas.style.touchAction = "none";
+    canvas.onpointerdown = (e) => {
+      isPointerDown = true;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch (err) {}
     };
-    window.addEventListener("mousemove", (e) => {
-      if (!isMouseDown) return;
-      const dx = e.clientX - lastMouseX;
-      const dy = e.clientY - lastMouseY;
+
+    canvas.onpointermove = (e) => {
+      if (!isPointerDown) return;
+      const dx = e.clientX - lastPointerX;
+      const dy = e.clientY - lastPointerY;
       rotY += dx * 0.008;
       rotX += dy * 0.008;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-    });
-    window.addEventListener("mouseup", () => {
-      isMouseDown = false;
-    });
-
-    // Touch interaction
-    canvas.ontouchstart = (e) => {
-      if (e.touches.length > 0) {
-        isMouseDown = true;
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
-      }
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
     };
-    window.addEventListener("touchmove", (e) => {
-      if (!isMouseDown || e.touches.length === 0) return;
-      const dx = e.touches[0].clientX - lastMouseX;
-      const dy = e.touches[0].clientY - lastMouseY;
-      rotY += dx * 0.008;
-      rotX += dy * 0.008;
-      lastMouseX = e.touches[0].clientX;
-      lastMouseY = e.touches[0].clientY;
-    });
-    window.addEventListener("touchend", () => {
-      isMouseDown = false;
-    });
 
-    // Render Loop
+    function endPointerDrag(e) {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      try {
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
+    }
+
+    canvas.onpointerup = endPointerDrag;
+    canvas.onpointercancel = endPointerDrag;
+
+    // Render Loop — Warm Editorial Bronze & Amber Palette (Zero Blue, Zero Purple)
     function render3D() {
-      if (!sim3DModal.classList.contains("open")) {
+      if (!sim3DModal || !sim3DModal.classList.contains("open")) {
         cancelAnimationFrame(sim3DAnimId);
+        sim3DAnimId = null;
         return;
       }
 
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      if (autoSpin && !isMouseDown) {
+      if (autoSpin && !isPointerDown) {
         rotY += 0.012;
         rotX += 0.006;
       }
@@ -567,15 +615,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return { px, py, pz, z2 };
       });
 
-      // Draw Edges
+      // Draw Edges in Warm Burnished Bronze
       ctx.lineWidth = 1.8;
       edges.forEach(([i, j]) => {
         const p1 = projected[i];
         const p2 = projected[j];
         const avgZ = (p1.z2 + p2.z2) / 2;
-        const alpha = Math.max(0.15, Math.min(0.9, (avgZ + 1.2) / 2.4));
+        const alpha = Math.max(0.18, Math.min(0.92, (avgZ + 1.2) / 2.4));
 
-        ctx.strokeStyle = `rgba(118, 184, 216, ${alpha})`;
+        ctx.strokeStyle = `rgba(140, 94, 53, ${alpha})`;
         ctx.beginPath();
         ctx.moveTo(p1.px, p1.py);
         ctx.lineTo(p2.px, p2.py);
@@ -584,23 +632,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Draw Vertices
       projected.forEach((p) => {
-        const radius = Math.max(2, (p.z2 + 1.5) * 2.8);
-        ctx.fillStyle = "#fff";
+        const radius = Math.max(2.2, (p.z2 + 1.5) * 2.8);
+        ctx.fillStyle = "#ffffff";
         ctx.beginPath();
         ctx.arc(p.px, p.py, radius, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = "rgba(140, 94, 53, 0.7)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
       });
 
-      // Draw Concentric Gyro Rings
+      // Draw Concentric Gyro Rings in Polished Brass & Amber Gold
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.strokeStyle = "rgba(212, 184, 150, 0.4)";
+      ctx.strokeStyle = "rgba(212, 184, 150, 0.5)";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.ellipse(0, 0, scale * 1.35, scale * 0.45, rotY * 0.5, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.strokeStyle = "rgba(189, 140, 229, 0.35)";
+      ctx.strokeStyle = "rgba(197, 145, 62, 0.45)";
       ctx.beginPath();
       ctx.ellipse(0, 0, scale * 1.55, scale * 0.55, -rotY * 0.7, 0, Math.PI * 2);
       ctx.stroke();
