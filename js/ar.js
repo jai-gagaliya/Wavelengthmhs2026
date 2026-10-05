@@ -662,4 +662,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     render3D();
   }
+
+  // Deep-link URL hash support for opening simulators
+  function checkUrlHash() {
+    const hash = window.location.hash;
+    if (hash === "#simColorModal" && simColorModal) {
+      simColorModal.classList.add("open");
+      initSimColorSlider();
+    } else if (hash === "#sim3DModal" && sim3DModal) {
+      sim3DModal.classList.add("open");
+      initSim3DViewer();
+    }
+  }
+
+  checkUrlHash();
+  window.addEventListener("hashchange", checkUrlHash);
 });

@@ -888,12 +888,12 @@ header.site-header {
 
 .article-row-item {
   display: grid;
-  grid-template-columns: 44px 100px minmax(0, 1fr) 140px;
+  grid-template-columns: 44px 108px minmax(0, 1fr) 140px;
   gap: 24px;
   align-items: center;
-  padding: 18px 22px;
+  padding: 20px 24px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-xs);
   box-shadow: var(--shadow-subtle);
   text-decoration: none;
@@ -911,19 +911,20 @@ header.site-header {
 
 .article-row-num {
   font-family: "DM Mono", monospace;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--accent);
   text-align: center;
 }
 
 .article-row-cover {
-  width: 100px;
+  width: 108px;
   aspect-ratio: 3 / 2;
   border-radius: var(--radius-xs);
   overflow: hidden;
   border: 1px solid var(--border-strong);
   background: var(--surface-muted);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .article-row-cover img {
@@ -936,7 +937,7 @@ header.site-header {
 .article-row-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .article-category-tag {
@@ -945,14 +946,14 @@ header.site-header {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .article-title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.28;
   color: var(--text-primary);
   transition: color var(--transition-fast);
 }
@@ -962,22 +963,23 @@ header.site-header {
 }
 
 .article-summary {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.55;
+  line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-top: 2px;
 }
 
 .article-byline {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text-dim);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .byline-dot {
@@ -1146,30 +1148,39 @@ header.site-header {
 }
 
 .spotlight-actions {
-  padding-top: 16px;
+  padding-top: 18px;
   border-top: 1px solid var(--border-subtle);
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
 }
 
 .spotlight-primary-btn {
-  display: flex;
+  flex: 1.2;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 12px 18px;
-  background: var(--text-primary);
-  color: var(--bg);
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--accent);
+  color: #ffffff;
+  border: 1.5px solid var(--accent);
   border-radius: var(--radius-xs);
   font-family: "DM Mono", monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 500;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(140, 94, 53, 0.25);
+  transition: all var(--transition-fast);
 }
 
 .spotlight-primary-btn:hover {
-  background: var(--accent);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(140, 94, 53, 0.35);
 }
 
 .spotlight-primary-btn svg {
@@ -1177,7 +1188,33 @@ header.site-header {
 }
 
 .spotlight-primary-btn:hover svg {
-  transform: translateX(4px);
+  transform: translateX(3px);
+}
+
+.spotlight-secondary-btn {
+  flex: 0.95;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-fast);
+}
+
+.spotlight-secondary-btn:hover {
+  background: var(--surface-muted);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
