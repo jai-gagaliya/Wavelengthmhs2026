@@ -335,12 +335,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // Exit Buttons & Keyboard Escape / Modal dismissals
   if (btnExitAR) btnExitAR.addEventListener("click", exitAR);
 
+  // Helper to format mm:ss
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
+
   // Close modals on backdrop click
   [simColorModal, sim3DModal].forEach((modal) => {
     if (!modal) return;
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
         modal.classList.remove("open");
+        if (modal === simColorModal) {
+          pauseSimVideo();
+        }
         if (modal === sim3DModal && sim3DAnimId) {
           cancelAnimationFrame(sim3DAnimId);
           sim3DAnimId = null;
@@ -354,6 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isARActive) exitAR();
       if (simColorModal && simColorModal.classList.contains("open")) {
         simColorModal.classList.remove("open");
+        pauseSimVideo();
       }
       if (sim3DModal && sim3DModal.classList.contains("open")) {
         sim3DModal.classList.remove("open");
@@ -377,93 +389,156 @@ document.addEventListener("DOMContentLoaded", () => {
   // NON-AR SIMULATORS & INTERACTIVE PREVIEWS
   // ==========================================================================
 
-  // Simulator 1: Black & White to Colour Split Slider
+  // Simulator 1: Chromatic Motion Video Preview Player (wavy.mp4)
+  const videoPlayer = document.getElementById("simVideoPlayer");
+  const videoContainer = document.getElementById("simVideoContainer");
+  const videoPlayOverlayBtn = document.getElementById("simVideoPlayOverlayBtn");
+  const btnToggleVideoPlay = document.getElementById("btnToggleVideoPlay");
+  const btnToggleVideoMute = document.getElementById("btnToggleVideoMute");
+  const btnRestartVideo = document.getElementById("btnRestartVideo");
+  const videoTimelineSlider = document.getElementById("videoTimelineSlider");
+  const videoTimeDisplay = document.getElementById("videoTimeDisplay");
+  const videoPlayIcon = document.getElementById("videoPlayIcon");
+  const videoPlayLabel = document.getElementById("videoPlayLabel");
+  const videoMuteIcon = document.getElementById("videoMuteIcon");
+  const videoMuteLabel = document.getElementById("videoMuteLabel");
+
   if (btnSimColor && simColorModal) {
     btnSimColor.addEventListener("click", () => {
       simColorModal.classList.add("open");
-      initSimColorSlider();
+      initSimVideoPlayer();
     });
   }
   if (btnCloseColorModal && simColorModal) {
     btnCloseColorModal.addEventListener("click", () => {
       simColorModal.classList.remove("open");
+      pauseSimVideo();
     });
   }
 
-  let simColorInitialized = false;
-  function initSimColorSlider() {
-    const box = document.getElementById("simColorBox");
-    const range = document.getElementById("simColorRange");
-    if (!box) return;
+  let simVideoInitialized = false;
+  let isVideoSeeking = false;
 
-    const layerColor = box.querySelector(".sim-layer-color");
-    const bar = box.querySelector(".sim-slider-bar");
-    const knob = box.querySelector(".sim-slider-knob");
+  function initSimVideoPlayer() {
+    if (!videoPlayer) return;
 
-    let simColorRafId = null;
+    if (!simVideoInitialized) {
+      simVideoInitialized = true;
 
-    function applyPercent(pct) {
-      pct = Math.max(0, Math.min(100, pct));
-      if (layerColor) layerColor.style.clipPath = `polygon(0 0, ${pct}% 0, ${pct}% 100%, 0 100%)`;
-      if (bar) bar.style.left = `${pct}%`;
-      if (knob) knob.style.left = `${pct}%`;
-      if (range) range.value = pct;
-    }
-
-    function setPercent(pct) {
-      if (simColorRafId) cancelAnimationFrame(simColorRafId);
-      simColorRafId = requestAnimationFrame(() => {
-        applyPercent(pct);
-      });
-    }
-
-    if (simColorInitialized) {
-      applyPercent(50);
-      return;
-    }
-    simColorInitialized = true;
-
-    if (range) {
-      range.addEventListener("input", (e) => {
-        setPercent(parseFloat(e.target.value));
-      });
-    }
-
-    // Modern Pointer Events for high-framerate, non-stuttering drag
-    box.style.touchAction = "none";
-    let isDragging = false;
-
-    function getPercentFromPointer(e) {
-      const rect = box.getBoundingClientRect();
-      if (rect.width <= 0) return 50;
-      return Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-    }
-
-    box.addEventListener("pointerdown", (e) => {
-      isDragging = true;
-      try {
-        box.setPointerCapture(e.pointerId);
-      } catch (err) {}
-      setPercent(getPercentFromPointer(e));
-    });
-
-    box.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      setPercent(getPercentFromPointer(e));
-    });
-
-    function endDrag(e) {
-      if (!isDragging) return;
-      isDragging = false;
-      try {
-        if (box.hasPointerCapture(e.pointerId)) {
-          box.releasePointerCapture(e.pointerId);
+      function updatePlayUI(isPlaying) {
+        if (videoContainer) {
+          videoContainer.classList.toggle("is-playing", isPlaying);
         }
-      } catch (err) {}
+        if (videoPlayIcon) {
+          videoPlayIcon.textContent = isPlaying ? "⏸" : "▶";
+        }
+        if (videoPlayLabel) {
+          videoPlayLabel.textContent = isPlaying ? "Pause Video" : "Play Video";
+        }
+        if (btnToggleVideoPlay) {
+          btnToggleVideoPlay.classList.toggle("active", isPlaying);
+        }
+      }
+
+      function togglePlay() {
+        if (videoPlayer.paused || videoPlayer.ended) {
+          videoPlayer.play().then(() => {
+            updatePlayUI(true);
+          }).catch((err) => {
+            console.warn("Video play prevented:", err);
+          });
+        } else {
+          videoPlayer.pause();
+          updatePlayUI(false);
+        }
+      }
+
+      function toggleMute() {
+        videoPlayer.muted = !videoPlayer.muted;
+        const isMuted = videoPlayer.muted;
+        if (videoMuteIcon) {
+          videoMuteIcon.textContent = isMuted ? "🔇" : "🔊";
+        }
+        if (videoMuteLabel) {
+          videoMuteLabel.textContent = isMuted ? "Sound: Muted" : "Sound: Unmuted";
+        }
+        if (btnToggleVideoMute) {
+          btnToggleVideoMute.classList.toggle("active", !isMuted);
+        }
+      }
+
+      function restartVideo() {
+        videoPlayer.currentTime = 0;
+        videoPlayer.play().then(() => {
+          updatePlayUI(true);
+        }).catch(() => {});
+      }
+
+      if (btnToggleVideoPlay) btnToggleVideoPlay.addEventListener("click", togglePlay);
+      if (videoPlayOverlayBtn) videoPlayOverlayBtn.addEventListener("click", togglePlay);
+      if (videoPlayer) videoPlayer.addEventListener("click", togglePlay);
+      if (btnToggleVideoMute) btnToggleVideoMute.addEventListener("click", toggleMute);
+      if (btnRestartVideo) btnRestartVideo.addEventListener("click", restartVideo);
+
+      videoPlayer.addEventListener("timeupdate", () => {
+        const current = videoPlayer.currentTime;
+        const duration = videoPlayer.duration || 0;
+        if (videoTimeDisplay && duration > 0) {
+          videoTimeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+        }
+        if (videoTimelineSlider && duration > 0 && !isVideoSeeking) {
+          videoTimelineSlider.value = (current / duration) * 100;
+        }
+      });
+
+      videoPlayer.addEventListener("loadedmetadata", () => {
+        if (videoTimeDisplay) {
+          videoTimeDisplay.textContent = `0:00 / ${formatTime(videoPlayer.duration || 0)}`;
+        }
+      });
+
+      videoPlayer.addEventListener("play", () => updatePlayUI(true));
+      videoPlayer.addEventListener("pause", () => updatePlayUI(false));
+      videoPlayer.addEventListener("ended", () => updatePlayUI(false));
+
+      if (videoTimelineSlider) {
+        videoTimelineSlider.addEventListener("input", (e) => {
+          isVideoSeeking = true;
+          const val = parseFloat(e.target.value);
+          const duration = videoPlayer.duration || 0;
+          if (duration > 0 && videoTimeDisplay) {
+            const seekTime = (val / 100) * duration;
+            videoTimeDisplay.textContent = `${formatTime(seekTime)} / ${formatTime(duration)}`;
+          }
+        });
+
+        videoTimelineSlider.addEventListener("change", (e) => {
+          const val = parseFloat(e.target.value);
+          const duration = videoPlayer.duration || 0;
+          if (duration > 0) {
+            videoPlayer.currentTime = (val / 100) * duration;
+          }
+          isVideoSeeking = false;
+        });
+      }
     }
 
-    box.addEventListener("pointerup", endDrag);
-    box.addEventListener("pointercancel", endDrag);
+    videoPlayer.play().catch(() => {
+      videoPlayer.muted = true;
+      if (videoMuteIcon) videoMuteIcon.textContent = "🔇";
+      if (videoMuteLabel) videoMuteLabel.textContent = "Sound: Muted";
+      videoPlayer.play().catch(() => {});
+    });
+  }
+
+  function pauseSimVideo() {
+    if (videoPlayer && !videoPlayer.paused) {
+      videoPlayer.pause();
+      if (videoContainer) videoContainer.classList.remove("is-playing");
+      if (videoPlayIcon) videoPlayIcon.textContent = "▶";
+      if (videoPlayLabel) videoPlayLabel.textContent = "Play Video";
+      if (btnToggleVideoPlay) btnToggleVideoPlay.classList.remove("active");
+    }
   }
 
   // Simulator 2: 3D Model Canvas Orbit Viewer
@@ -476,33 +551,198 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose3DModal && sim3DModal) {
     btnClose3DModal.addEventListener("click", () => {
       sim3DModal.classList.remove("open");
-      if (sim3DAnimId) {
-        cancelAnimationFrame(sim3DAnimId);
-        sim3DAnimId = null;
-      }
+      cleanup3DViewer();
     });
   }
 
-  // Pure Vanilla Canvas 3D Topological Crystal Rendering Engine
-  let sim3DAnimId = null;
-  function initSim3DViewer() {
+  function cleanup3DViewer() {
     if (sim3DAnimId) {
       cancelAnimationFrame(sim3DAnimId);
       sim3DAnimId = null;
     }
+    if (activeThreeRenderer) {
+      try {
+        activeThreeRenderer.dispose();
+      } catch (err) {}
+      activeThreeRenderer = null;
+    }
+  }
+
+  let sim3DAnimId = null;
+  let activeThreeRenderer = null;
+
+  function initSim3DViewer() {
+    cleanup3DViewer();
 
     const canvas = document.getElementById("preview3DCanvas");
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
 
-    // Match device pixel ratio
+    // Check if Three.js and GLTFLoader are available
+    const THREE_LIB = window.THREE || (window.AFRAME && window.AFRAME.THREE);
+    if (THREE_LIB && THREE_LIB.GLTFLoader && THREE_LIB.WebGLRenderer) {
+      try {
+        initThreeGLBViewer(THREE_LIB, canvas);
+        return;
+      } catch (err) {
+        console.warn("WebGL GLB viewer initialization failed, using canvas fallback:", err);
+      }
+    }
+
+    initFallbackCanvasCrystal(canvas);
+  }
+
+  // Interactive WebGL GLB Model Orbit Engine
+  function initThreeGLBViewer(THREE_LIB, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const width = rect.width || 600;
+    const height = rect.height || 375;
+
+    const renderer = new THREE_LIB.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+    activeThreeRenderer = renderer;
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const scene = new THREE_LIB.Scene();
+    scene.background = new THREE_LIB.Color(0xffffff);
+
+    const camera = new THREE_LIB.PerspectiveCamera(40, width / height, 0.1, 100);
+    camera.position.set(0, 0, 3.2);
+
+    const ambLight = new THREE_LIB.AmbientLight(0xfff8ee, 1.4);
+    scene.add(ambLight);
+
+    const dirLight1 = new THREE_LIB.DirectionalLight(0xffffff, 1.5);
+    dirLight1.position.set(5, 10, 7);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE_LIB.DirectionalLight(0xd4b896, 0.8);
+    dirLight2.position.set(-5, -5, -5);
+    scene.add(dirLight2);
+
+    const pivot = new THREE_LIB.Group();
+    scene.add(pivot);
+
+    let autoSpin = true;
+    let wireframeOnly = false;
+    let isDragging = false;
+    let lastX = 0, lastY = 0;
+
+    const btnSpin = document.getElementById("btnToggleSpin");
+    const btnWire = document.getElementById("btnToggleWire");
+
+    if (btnSpin) {
+      btnSpin.onclick = () => {
+        autoSpin = !autoSpin;
+        btnSpin.classList.toggle("active", autoSpin);
+      };
+    }
+
+    let loadedModel = null;
+    if (btnWire) {
+      btnWire.onclick = () => {
+        wireframeOnly = !wireframeOnly;
+        btnWire.classList.toggle("active", wireframeOnly);
+        if (loadedModel) {
+          loadedModel.traverse((child) => {
+            if (child.isMesh && child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach((m) => (m.wireframe = wireframeOnly));
+              } else {
+                child.material.wireframe = wireframeOnly;
+              }
+            }
+          });
+        }
+      };
+    }
+
+    const loader = new THREE_LIB.GLTFLoader();
+    loader.load(
+      "./assets/models/article-model.glb",
+      (gltf) => {
+        loadedModel = gltf.scene;
+
+        const box = new THREE_LIB.Box3().setFromObject(loadedModel);
+        const center = box.getCenter(new THREE_LIB.Vector3());
+        const size = box.getSize(new THREE_LIB.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = 1.9 / (maxDim || 1);
+
+        loadedModel.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+        loadedModel.scale.set(scale, scale, scale);
+
+        pivot.add(loadedModel);
+      },
+      undefined,
+      (err) => {
+        console.warn("Failed to load GLB file, falling back to procedural canvas:", err);
+        cleanup3DViewer();
+        initFallbackCanvasCrystal(canvas);
+      }
+    );
+
+    canvas.style.touchAction = "none";
+    canvas.onpointerdown = (e) => {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    };
+
+    canvas.onpointermove = (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      pivot.rotation.y += dx * 0.008;
+      pivot.rotation.x += dy * 0.008;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+
+    const stopDrag = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try {
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
+    };
+    canvas.onpointerup = stopDrag;
+    canvas.onpointercancel = stopDrag;
+
+    canvas.onwheel = (e) => {
+      e.preventDefault();
+      camera.position.z = Math.max(1.2, Math.min(7.0, camera.position.z + e.deltaY * 0.003));
+    };
+
+    function renderThree() {
+      if (!sim3DModal || !sim3DModal.classList.contains("open")) {
+        cleanup3DViewer();
+        return;
+      }
+      if (autoSpin && !isDragging) {
+        pivot.rotation.y += 0.008;
+      }
+      renderer.render(scene, camera);
+      sim3DAnimId = requestAnimationFrame(renderThree);
+    }
+    renderThree();
+  }
+
+  // Pure Vanilla Canvas 3D Topological Crystal Rendering Engine (Fallback)
+  function initFallbackCanvasCrystal(canvas) {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
 
-    // 3D Polyhedron Vertices (Icosahedron / Topological Crystal)
     const phi = (1 + Math.sqrt(5)) / 2;
     const vertices = [
       [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
@@ -528,7 +768,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let isPointerDown = false;
     let lastPointerX = 0, lastPointerY = 0;
 
-    // Toolbar controls
     const btnSpin = document.getElementById("btnToggleSpin");
     const btnWire = document.getElementById("btnToggleWire");
 
@@ -545,7 +784,6 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
 
-    // High performance Pointer drag interaction
     canvas.style.touchAction = "none";
     canvas.onpointerdown = (e) => {
       isPointerDown = true;
@@ -579,11 +817,9 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.onpointerup = endPointerDrag;
     canvas.onpointercancel = endPointerDrag;
 
-    // Render Loop — Warm Editorial Bronze & Amber Palette (Zero Blue, Zero Purple)
     function render3D() {
       if (!sim3DModal || !sim3DModal.classList.contains("open")) {
-        cancelAnimationFrame(sim3DAnimId);
-        sim3DAnimId = null;
+        cleanup3DViewer();
         return;
       }
 
@@ -598,16 +834,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const cy = rect.height / 2;
       const scale = Math.min(rect.width, rect.height) * 0.35;
 
-      // Project vertices
       const projected = vertices.map(([x, y, z]) => {
-        // Rotate Y
         let x1 = x * Math.cos(rotY) + z * Math.sin(rotY);
         let z1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
-        // Rotate X
         let y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
         let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
 
-        // Perspective
         const dist = 3.2;
         const pz = z2 + dist;
         const px = cx + (x1 / pz) * scale * 2.2;
@@ -615,7 +847,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return { px, py, pz, z2 };
       });
 
-      // Draw Edges in Warm Burnished Bronze
       ctx.lineWidth = 1.8;
       edges.forEach(([i, j]) => {
         const p1 = projected[i];
@@ -630,7 +861,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
       });
 
-      // Draw Vertices
       projected.forEach((p) => {
         const radius = Math.max(2.2, (p.z2 + 1.5) * 2.8);
         ctx.fillStyle = "#ffffff";
@@ -642,7 +872,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
       });
 
-      // Draw Concentric Gyro Rings in Polished Brass & Amber Gold
       ctx.save();
       ctx.translate(cx, cy);
       ctx.strokeStyle = "rgba(212, 184, 150, 0.5)";
@@ -668,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const hash = window.location.hash;
     if (hash === "#simColorModal" && simColorModal) {
       simColorModal.classList.add("open");
-      initSimColorSlider();
+      initSimVideoPlayer();
     } else if (hash === "#sim3DModal" && sim3DModal) {
       sim3DModal.classList.add("open");
       initSim3DViewer();

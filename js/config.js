@@ -25,15 +25,15 @@ const WAVELENGTH_CONFIG = {
     {
       id: "article-1",
       number: "01",
-      title: "The Quantum Horizon: Coherence in Warm Biology",
-      author: "Dr. Elena Rostova",
-      narrator: "Narrated by Marcus Vance",
-      category: "Quantum Biophysics",
+      title: "Patient Zero: Between Being 'Human' and Being 'Hero'",
+      author: "Wavelength Editorial",
+      narrator: "Official Author Narration",
+      category: "Feature Essay",
       description:
-        "Investigating quantum coherence in avian magnetoreception and cryptochrome proteins, challenging the paradigm that living systems are too noisy for quantum states.",
-      audioSrc: "./assets/audio/article-1.wav",
+        "An introspective exploration of the psychological and ethical boundaries between humanity and heroism, examining the moral weight carried by those thrust into the vanguard of survival.",
+      audioSrc: "./assets/audio/patient-zero.mp3",
       coverImage: "./assets/images/covers/cover-1.svg",
-      tag: "Feature Article",
+      tag: "Feature Essay · Unabridged",
       accentColor: "#d4b896"
     },
     {
@@ -101,7 +101,7 @@ const WAVELENGTH_CONFIG = {
     targetsFile: "./assets/targets/targets.mind",
     isTargetFileCompiled: false, // Set to true once you have compiled and uploaded your real targets.mind
 
-    // Experience 1: Black & White to Colour Artwork Reveal
+    // Experience 1: Black & White to Colour Artwork Reveal & Video Motion
     // Triggered when camera detects the printed B&W artwork in the magazine
     experience1_colorReveal: {
       targetIndex: 0, // Target index inside targets.mind (0-indexed)
@@ -109,11 +109,12 @@ const WAVELENGTH_CONFIG = {
       articleTitle: "Chromatic Flux Resonator",
       magazinePage: "Page 14 · Feature Spread",
       description:
-        "Our print magazine is published in crisp monochrome. Hold your camera over the Page 14 artwork to witness the linework dissolve into vibrant full-spectrum colour.",
+        "Our print magazine is published in crisp monochrome. Hold your camera over the Page 14 artwork to witness the dynamic full-motion chromatic video reveal.",
       
-      // Graphic assets
+      // Graphic & Video assets
       printedImage: "./assets/images/bw-print-sample.svg",
       colorImage: "./assets/images/color-overlay-sample.svg",
+      videoPath: "./assets/videos/wavy.mp4",
       
       // Overlay alignment settings
       aspectRatio: { width: 1.0, height: 1.0 }, // 1:1 square
@@ -142,10 +143,10 @@ const WAVELENGTH_CONFIG = {
       // 3D Model settings
       modelPath: "./assets/models/article-model.glb",
       
-      // Set to true while real GLB is pending; renders a high-tech procedural geometry
-      useDemoGeometry: true,
+      // Custom uploaded GLB is active
+      useDemoGeometry: false,
       
-      // Transform settings for GLB or Demo Model
+      // Transform settings for GLB Model
       scale: { x: 0.35, y: 0.35, z: 0.35 },
       position: { x: 0, y: 0.15, z: 0 },
       rotation: { x: 0, y: 0, z: 0 },
