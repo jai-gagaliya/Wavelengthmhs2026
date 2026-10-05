@@ -9,7 +9,7 @@ MindAR uses a single compiled `.mind` binary file that bundles feature points ex
 Each image in the compiled file is referenced by an **index starting from 0**:
 - **Target Index 0**: Reserved for **Experience 1** ("From Black & White to Colour" printed illustration).
 - **Target Index 1**: Reserved for **Experience 2** ("Article with 3D Model" printed marker/artwork).
-- **Target Index 2+**: Any additional articles or interactive figures you want to add in the future.
+- **Target Index 2+**: Any additional articles or interactive targets you want to add in the future.
 
 ---
 

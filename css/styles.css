@@ -20,6 +20,7 @@
   --surface-plate: #f7f3eb;
 
   /* Deep Brown & Espresso Typography */
+  --ink: #1e1612;
   --text: #1e1612;
   --text-primary: #1e1612;
   --text-secondary: #382c23;
@@ -1176,24 +1177,35 @@ header.site-header {
 }
 
 .spotlight-primary-btn {
-  background: var(--ink);
-  color: #ffffff;
-  border: 1.5px solid var(--ink);
+  background: #1e1612 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1e1612 !important;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(30, 22, 18, 0.2);
+  box-shadow: 0 2px 8px rgba(30, 22, 18, 0.25);
 }
 
-.spotlight-primary-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(140, 94, 53, 0.3);
+.spotlight-primary-btn span {
+  color: #ffffff !important;
+  display: inline-block;
 }
 
 .spotlight-primary-btn svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
   transition: transform var(--transition-fast);
   flex-shrink: 0;
+}
+
+.spotlight-primary-btn:hover {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(140, 94, 53, 0.35);
+}
+
+.spotlight-primary-btn:hover span {
+  color: #ffffff !important;
 }
 
 .spotlight-primary-btn:hover svg {
@@ -1201,17 +1213,26 @@ header.site-header {
 }
 
 .spotlight-secondary-btn {
-  background: var(--surface);
-  color: var(--text-primary);
-  border: 1.5px solid var(--border-strong);
+  background: #ffffff !important;
+  color: #1e1612 !important;
+  border: 1.5px solid var(--border-strong) !important;
   box-shadow: var(--shadow-subtle);
 }
 
+.spotlight-secondary-btn span {
+  color: #1e1612 !important;
+  display: inline-block;
+}
+
 .spotlight-secondary-btn:hover {
-  background: var(--surface-muted);
-  border-color: var(--accent);
-  color: var(--accent-dark);
+  background: var(--surface-muted) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-dark) !important;
   transform: translateY(-2px);
+}
+
+.spotlight-secondary-btn:hover span {
+  color: var(--accent-dark) !important;
 }
 
 /* ==========================================================================

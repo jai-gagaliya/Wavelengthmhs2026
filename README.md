@@ -108,7 +108,7 @@ MindAR bundles feature detection data for all printed images into a single `.min
 - Additional targets can be indexed sequentially (`2`, `3`, etc.).
 
 ### Step-by-Step Target Compilation:
-1. Export high-contrast PNG or JPG images of the figures as printed in the magazine (800–1200px width recommended).
+1. Export high-contrast PNG or JPG images of the targets as printed in the magazine (800–1200px width recommended).
 2. Open the official **MindAR Target Compiler** web tool:
    **[https://hiukim.github.io/mind-ar-js-doc/tools/compile](https://hiukim.github.io/mind-ar-js-doc/tools/compile)**
 3. Drag & drop your images in exact order:

@@ -109,7 +109,7 @@ const WAVELENGTH_CONFIG = {
       articleTitle: "Chromatic Flux Resonator",
       magazinePage: "Page 14 · Feature Spread",
       description:
-        "Our print magazine is published in crisp monochrome. Hold your camera over Fig. 4.1 to witness the linework dissolve into vibrant full-spectrum colour.",
+        "Our print magazine is published in crisp monochrome. Hold your camera over the Page 14 artwork to witness the linework dissolve into vibrant full-spectrum colour.",
       
       // Graphic assets
       printedImage: "./assets/images/bw-print-sample.svg",
