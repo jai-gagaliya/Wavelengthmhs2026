@@ -392,135 +392,168 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Modal 2: 3D Model Interactive Orbit Viewer
+  // Modal 2: Real 3D Model Interactive Orbit Viewer (article-model.glb)
   let sim3dAnimationId = null;
+  let threeRenderer = null;
+  let threeScene = null;
+  let threeCamera = null;
+  let currentModelGroup = null;
+  let isModelLoaded = false;
+  let autoSpin = true;
+  let isWireframe = false;
+
   function init3DPreview(canvas) {
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
 
-    let width = (canvas.width = canvas.clientWidth || 400);
-    let height = (canvas.height = canvas.clientHeight || 300);
+    const width = canvas.clientWidth || 400;
+    const height = canvas.clientHeight || 300;
+    canvas.width = width;
+    canvas.height = height;
 
-    let rotX = 0.4;
-    let rotY = 0.6;
-    let isDragging = false;
-    let autoSpin = true;
-    let isWireframe = false;
-    let lastX = 0;
-    let lastY = 0;
-
-    canvas.addEventListener("pointerdown", (e) => {
-      isDragging = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-    });
-
-    canvas.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      rotY += dx * 0.015;
-      rotX += dy * 0.015;
-      lastX = e.clientX;
-      lastY = e.clientY;
-    });
-
-    const stopDrag = () => { isDragging = false; };
-    canvas.addEventListener("pointerup", stopDrag);
-    canvas.addEventListener("pointercancel", stopDrag);
-
-    const btnToggleSpin = document.getElementById("btnToggleSpin");
-    if (btnToggleSpin) {
-      btnToggleSpin.onclick = () => {
-        autoSpin = !autoSpin;
-        btnToggleSpin.textContent = autoSpin ? "Auto-Spin: ON" : "Auto-Spin: OFF";
-        btnToggleSpin.classList.toggle("active", autoSpin);
-      };
+    if (!window.THREE) {
+      console.warn("THREE.js not available for 3D preview");
+      return;
     }
 
-    const btnToggleWire = document.getElementById("btnToggleWire");
-    if (btnToggleWire) {
-      btnToggleWire.onclick = () => {
-        isWireframe = !isWireframe;
-        btnToggleWire.textContent = isWireframe ? "Wireframe: ON" : "Wireframe Mode";
-        btnToggleWire.classList.toggle("active", isWireframe);
-      };
-    }
+    if (!threeRenderer) {
+      try {
+        threeRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        threeRenderer.setSize(width, height, false);
+        threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-    const phi = (1 + Math.sqrt(5)) / 2;
-    const baseNodes = [
-      [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
-      [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
-      [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
-    ];
+        threeScene = new THREE.Scene();
+        threeCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+        threeCamera.position.set(0, 0, 3.8);
 
-    function draw() {
-      if (!sim3DModal || !sim3DModal.classList.contains("open")) return;
-      width = canvas.width = canvas.clientWidth || 400;
-      height = canvas.height = canvas.clientHeight || 300;
-      ctx.clearRect(0, 0, width, height);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+        threeScene.add(ambientLight);
 
-      if (autoSpin && !isDragging) {
-        rotY += 0.01;
-      }
+        const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+        dirLight1.position.set(2, 4, 3);
+        threeScene.add(dirLight1);
 
-      const cx = width / 2;
-      const cy = height / 2;
-      const scale = Math.min(width, height) * 0.28;
+        const dirLight2 = new THREE.DirectionalLight(0xd4b896, 1.0);
+        dirLight2.position.set(-2, -3, -2);
+        threeScene.add(dirLight2);
 
-      const projected = baseNodes.map(([x, y, z]) => {
-        let x1 = x * Math.cos(rotY) + z * Math.sin(rotY);
-        let z1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
-        let y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+        // Orbit drag controls
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
 
-        const fov = 3.5;
-        const pz = fov / (fov + z2);
-        return [cx + x1 * scale * pz, cy + y2 * scale * pz, z2];
-      });
+        canvas.addEventListener("pointerdown", (e) => {
+          isDragging = true;
+          lastX = e.clientX;
+          lastY = e.clientY;
+          try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+        });
 
-      // Ring
-      ctx.save();
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, scale * 1.5, scale * 0.5, rotY * 0.7, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(212, 184, 150, 0.75)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.restore();
+        canvas.addEventListener("pointermove", (e) => {
+          if (!isDragging || !currentModelGroup) return;
+          const dx = e.clientX - lastX;
+          const dy = e.clientY - lastY;
+          currentModelGroup.rotation.y += dx * 0.012;
+          currentModelGroup.rotation.x += dy * 0.012;
+          lastX = e.clientX;
+          lastY = e.clientY;
+        });
 
-      // Edges
-      ctx.strokeStyle = isWireframe ? "rgba(212, 184, 150, 0.9)" : "rgba(247, 238, 220, 0.5)";
-      ctx.lineWidth = 1.5;
-      for (let i = 0; i < projected.length; i++) {
-        for (let j = i + 1; j < projected.length; j++) {
-          const dx = baseNodes[i][0] - baseNodes[j][0];
-          const dy = baseNodes[i][1] - baseNodes[j][1];
-          const dz = baseNodes[i][2] - baseNodes[j][2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-          if (dist < 2.1) {
-            ctx.beginPath();
-            ctx.moveTo(projected[i][0], projected[i][1]);
-            ctx.lineTo(projected[j][0], projected[j][1]);
-            ctx.stroke();
-          }
+        const stopDrag = () => { isDragging = false; };
+        canvas.addEventListener("pointerup", stopDrag);
+        canvas.addEventListener("pointercancel", stopDrag);
+
+        const btnToggleSpin = document.getElementById("btnToggleSpin");
+        if (btnToggleSpin) {
+          btnToggleSpin.onclick = () => {
+            autoSpin = !autoSpin;
+            btnToggleSpin.textContent = autoSpin ? "Auto-Spin: ON" : "Auto-Spin: OFF";
+            btnToggleSpin.classList.toggle("active", autoSpin);
+          };
         }
+
+        const btnToggleWire = document.getElementById("btnToggleWire");
+        if (btnToggleWire) {
+          btnToggleWire.onclick = () => {
+            isWireframe = !isWireframe;
+            btnToggleWire.textContent = isWireframe ? "Wireframe: ON" : "Wireframe Mode";
+            btnToggleWire.classList.toggle("active", isWireframe);
+            if (currentModelGroup) {
+              currentModelGroup.traverse((child) => {
+                if (child.isMesh && child.material) {
+                  if (Array.isArray(child.material)) {
+                    child.material.forEach((m) => { m.wireframe = isWireframe; });
+                  } else {
+                    child.material.wireframe = isWireframe;
+                  }
+                }
+              });
+            }
+          };
+        }
+
+        // Load the actual production GLB model: article-model.glb
+        if (window.THREE.GLTFLoader) {
+          const loader = new THREE.GLTFLoader();
+          loader.load(
+            "./assets/models/article-model.glb",
+            (gltf) => {
+              console.log("✓ Successfully loaded article-model.glb for 3D Inspector");
+              const model = gltf.scene;
+
+              // Center and scale model to fit view
+              const box = new THREE.Box3().setFromObject(model);
+              const center = box.getCenter(new THREE.Vector3());
+              const size = box.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+              model.position.sub(center);
+              const scale = 2.4 / maxDim;
+              model.scale.set(scale, scale, scale);
+
+              currentModelGroup = new THREE.Group();
+              currentModelGroup.add(model);
+              threeScene.add(currentModelGroup);
+              isModelLoaded = true;
+            },
+            undefined,
+            (err) => {
+              console.error("Error loading article-model.glb:", err);
+            }
+          );
+        }
+      } catch (e) {
+        console.error("WebGL init error:", e);
+      }
+    }
+
+    // Render loop
+    function render() {
+      if (!sim3DModal || !sim3DModal.classList.contains("open")) {
+        sim3dAnimationId = null;
+        return;
       }
 
-      // Nodes
-      projected.forEach(([px, py]) => {
-        ctx.beginPath();
-        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-      });
+      const w = canvas.clientWidth || 400;
+      const h = canvas.clientHeight || 300;
+      if (canvas.width !== w || canvas.height !== h) {
+        threeRenderer.setSize(w, h, false);
+        threeCamera.aspect = w / h;
+        threeCamera.updateProjectionMatrix();
+      }
 
-      sim3dAnimationId = requestAnimationFrame(draw);
+      if (currentModelGroup && autoSpin) {
+        currentModelGroup.rotation.y += 0.008;
+      }
+
+      if (threeRenderer && threeScene && threeCamera) {
+        threeRenderer.render(threeScene, threeCamera);
+      }
+
+      sim3dAnimationId = requestAnimationFrame(render);
     }
 
     if (sim3dAnimationId) cancelAnimationFrame(sim3dAnimationId);
-    draw();
+    sim3dAnimationId = requestAnimationFrame(render);
   }
 
   // Open & Close Modal 2
