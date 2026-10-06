@@ -133,6 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
         setStatus(`✓ PAGE ${item.page} DETECTED`, "Full Chromatic Art Restored Over Monochrome Ink", true);
       }
 
+      // Explicitly ensure all child planes and 3D models are visible
+      targetEntity.object3D.visible = true;
+      const planes = targetEntity.querySelectorAll("a-plane");
+      planes.forEach((p) => {
+        p.object3D.visible = true;
+        if (p.getAttribute("material")) {
+          p.setAttribute("material", "opacity", 1);
+        }
+      });
+      const models = targetEntity.querySelectorAll("[gltf-model]");
+      models.forEach((m) => {
+        m.object3D.visible = true;
+      });
+
       // If this target has a video-overlay component, call show()
       const overlay = targetEntity.querySelector("[video-overlay]");
       if (overlay && overlay.components && overlay.components["video-overlay"]) {
@@ -164,6 +178,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     document.body.style.overflow = "hidden";
     setStatus("Starting AR Camera...", "Requesting camera stream and initializing tracking...", false);
+
+    // Force Three.js and MindAR to sync canvas aspect ratio and viewport
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 150);
 
     if (mindarScene && mindarScene.systems && mindarScene.systems["mindar-image-system"]) {
       try {
