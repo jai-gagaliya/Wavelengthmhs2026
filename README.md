@@ -27,7 +27,7 @@ MHS 2026/
 │   │   ├── logo.svg             # Vector typographic brand logo
 │   │   ├── bw-print-sample.svg  # Sample monochrome print illustration (Page 14)
 │   │   ├── color-overlay-sample.svg # Digital colour counterpart revealed in AR
-│   │   ├── marker-print-sample.svg  # 3D model anchor marker (Page 28)
+│   │   ├── marker-print-sample.svg  # 3D model anchor marker (Page 17)
 │   │   └── covers/              # Editorial SVG covers for Articles 01–05
 │   ├── targets/
 │   │   ├── targets.mind         # Compiled MindAR target file
@@ -86,12 +86,12 @@ Currently, 5 sample audio files (`article-1.wav` through `article-5.wav`) are in
      number: "01",
      title: "Patient Zero: Between Being 'Human' and Being 'Hero'",
      author: "Jai Gagaliya",
-     narrator: "AI Narration",
-     category: "Feature Essay",
+     narrator: "AI-Narration",
+     category: "Feature Article",
      description: "Your editorial synopsis...",
      audioSrc: "./assets/audio/patient-zero.mp3", // <-- Update path here
      coverImage: "./assets/images/covers/cover-1.svg",
-     tag: "Feature Essay · Unabridged"
+     tag: "Feature Article · Unabridged"
    }
    ```
 4. The custom player will automatically parse duration metadata, update timestamps, and synchronize seeking.
@@ -103,21 +103,19 @@ Currently, 5 sample audio files (`article-1.wav` through `article-5.wav`) are in
 MindAR bundles feature detection data for all printed images into a single `.mind` file.
 
 ### How Target Indices Work:
-- **Target Index `0`**: The B&W printed illustration on Page 14 (Experience 1: Colour Reveal).
-- **Target Index `1`**: The 3D model anchor marker on Page 28 (Experience 2: 3D Model).
-- Additional targets can be indexed sequentially (`2`, `3`, etc.).
+- **Targets `0`–`31`**: The complete magazine pages (Pages 01–31, excluding Pages 3 & 32).
+- **Target Index `16`**: Page 17 (Interactive 3D Model Anchor).
+- **Target Index `17`**: Pages 18 & 19 (Integrated Motion Video Reveal: `wavy.mp4`).
 
 ### Step-by-Step Target Compilation:
 1. Export high-contrast PNG or JPG images of the targets as printed in the magazine (800–1200px width recommended).
 2. Open the official **MindAR Target Compiler** web tool:
    **[https://hiukim.github.io/mind-ar-js-doc/tools/compile](https://hiukim.github.io/mind-ar-js-doc/tools/compile)**
-3. Drag & drop your images in exact order:
-   - **First image**: The Page 14 B&W illustration (assigned index `0`).
-   - **Second image**: The Page 28 3D marker (assigned index `1`).
+3. Drag & drop your images in exact sequence (Pages 01–32).
 4. Click **Start** to compile.
 5. Click **Download** to obtain `targets.mind`.
 6. Replace the placeholder file at:
-   `assets/targets/targets.mind`
+   `assets/targets/targets.mind` (and `mindar-targets/targets.mind`)
 7. In `js/config.js`, set:
    ```javascript
    isTargetFileCompiled: true

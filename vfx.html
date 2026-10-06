@@ -16,9 +16,66 @@
     href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
     rel="stylesheet" />
 
-  <!-- Versioned Pinned A-Frame & MindAR Dependencies -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <!-- Pinned A-Frame 1.2.0 & MindAR 1.2.3 with video-overlay component -->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script>
+    // Register component BEFORE scene loads
+    AFRAME.registerComponent('video-overlay', {
+      init: function() {
+        this.videoId = this.el.getAttribute('data-video');
+        this.targetIndex = parseInt(this.el.getAttribute('data-index'));
+        this.video = null;
+        this.playing = false;
+        
+        // Hide initially
+        this.el.object3D.visible = false;
+        
+        // Wait for scene to be ready or fetch directly
+        this.video = document.getElementById(this.videoId);
+        this.el.sceneEl.addEventListener('loaded', () => {
+          if (!this.video) this.video = document.getElementById(this.videoId);
+          if (this.video) {
+            console.log('✓ Video overlay ready:', this.videoId, 'for target', this.targetIndex);
+          } else {
+            console.error('✗ Video element NOT FOUND:', this.videoId);
+          }
+        });
+      },
+      
+      show: function() {
+        console.log('SHOW called for:', this.videoId);
+        this.el.object3D.visible = true;
+        this.el.setAttribute('material', 'opacity', 1);
+        if (this.video) {
+          this.video.muted = false;
+          this.video.play().then(() => {
+            console.log('✓ Video playing:', this.videoId);
+          }).catch(e => {
+            console.warn('Playback unmuted error, attempting muted fallback:', e);
+            this.video.muted = true;
+            this.video.play().catch(err => {
+              console.error('✗ Play error for', this.videoId, ':', err);
+            });
+          });
+          this.playing = true;
+        } else {
+          console.error('✗ No video element to play:', this.videoId);
+        }
+      },
+      
+      hide: function() {
+        console.log('HIDE called for:', this.videoId);
+        this.el.object3D.visible = false;
+        if (this.video) {
+          this.video.pause();
+          this.video.currentTime = 0;
+          this.playing = false;
+          console.log('✓ Video stopped:', this.videoId);
+        }
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.3/dist/mindar-image-aframe.prod.js"></script>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="./css/styles.css?v=2026.13" />
@@ -52,51 +109,46 @@
     <main role="main">
       <section class="vfx-header-section" aria-labelledby="vfx-hub-heading">
         <div class="vfx-header-top">
-          <p class="hero-eyebrow">WebAR Image-Tracking Engine</p>
+          <p class="hero-eyebrow">Edition-Wide Augmented Reality Engine</p>
         </div>
 
         <h1 id="vfx-hub-heading" class="vfx-page-title gold-glow-text">
-          Augmented Reality Experiences.
+          Augmented Reality Everywhere.
         </h1>
 
         <p class="vfx-page-intro">
-          Wavelength is printed in deep monochrome. Using WebAR image tracking, your camera recognises
-          printed lithographs and markers, projecting chromatic spectrums and 3D topological forms directly onto the
-          page.
-          Camera permissions are only requested when you explicitly tap a launch button.
+          The entire physical edition of Wavelength is printed in deep monochrome, and augmented reality is live everywhere across the publication. Point your camera at ANY page from Page 01 to 31 to transform black-and-white ink into rich digital colour, unlock the integrated motion video reveal on Pages 18 &amp; 19, or project spatial 3D models over feature articles.
         </p>
       </section>
 
       <!-- Two Clearly Separated Experience Cards -->
       <section class="vfx-experiences-grid" aria-label="Augmented Reality Experiences Selection">
-        <!-- Experience 1: Black & White to Colour -->
+        <!-- Experience 1: Black & White to Colour & Motion Video -->
         <article class="vfx-card card-color-reveal" id="expCardColor">
           <div class="vfx-card-top">
             <span class="vfx-card-num">EXPERIENCE 01</span>
-            <span class="vfx-card-target-tag">TARGET 0 · PAGE 14</span>
+            <span class="vfx-card-target-tag">ALL PAGES 01–31 · LIVE AR EVERYWHERE</span>
           </div>
 
           <div class="vfx-card-media">
-            <img src="./assets/images/bw-print-sample.svg" alt="Black and white print illustration" />
-            <span class="media-print-badge">Print: Monochrome Linework</span>
+            <img src="./assets/images/spread-18-19.jpg" alt="Colour spread across Pages 18 and 19" />
+            <span class="media-print-badge">Every Page Transforms · B&amp;W to Colour</span>
           </div>
 
-          <h2 class="vfx-card-title">From Black &amp; White to Colour</h2>
-          <p class="vfx-card-article-ref">Article 01 · Chromatic Flux Resonator</p>
+          <h2 class="vfx-card-title">From Black &amp; White to Colour Across the Edition</h2>
+          <p class="vfx-card-article-ref">Every Page Transforms · Pages 18 &amp; 19 Video Reveal</p>
           <p class="vfx-card-desc">
-            Point your camera at the black-and-white print illustration on Page 14.
-            When recognised, the digital colour counterpart aligns seamlessly over the ink, blooming into an animated
-            chromatic reveal.
+            Augmented reality is active across the entire magazine. Point your camera at any black-and-white page from Page 01 to 31 to reveal its vibrant digital colour artwork. On Pages 18 &amp; 19, the camera unlocks an integrated motion video reveal alongside the spread.
           </p>
 
           <div class="vfx-actions-row">
             <button class="btn-launch-ar" id="btnLaunchColorAR" type="button"
-              aria-label="Launch Camera AR for Colour Reveal">
+              aria-label="Launch Camera AR across all pages">
               <span>Start Camera</span>
             </button>
             <button class="btn-preview-sim" id="btnSimColor" type="button"
-              aria-label="Open Video Preview for Colour Reveal">
-              <span>Preview Video</span>
+              aria-label="Preview All Pages B&amp;W to Colour &amp; Video">
+              <span>Preview All Pages &amp; Video</span>
             </button>
           </div>
         </article>
@@ -105,28 +157,26 @@
         <article class="vfx-card card-3d-model" id="expCard3D">
           <div class="vfx-card-top">
             <span class="vfx-card-num">EXPERIENCE 02</span>
-            <span class="vfx-card-target-tag">TARGET 1 · PAGE 28</span>
+            <span class="vfx-card-target-tag">PAGE 17 · SPATIAL 3D MODEL ANCHOR</span>
           </div>
 
           <div class="vfx-card-media">
-            <img src="./assets/images/marker-print-sample.svg" alt="3D target marker printed alongside article" />
-            <span class="media-print-badge">Marker: Article 05 Anchor</span>
+            <img src="./assets/images/marker-print-sample.svg" alt="3D target marker printed alongside article on Page 17" />
+            <span class="media-print-badge">Interactive 3D on Page 17</span>
           </div>
 
-          <h2 class="vfx-card-title">Explore in 3D</h2>
-          <p class="vfx-card-article-ref">Article 05 · Topological Gyro-Lattice</p>
+          <h2 class="vfx-card-title">Spatial 3D Experiences Across Articles</h2>
+          <p class="vfx-card-article-ref">Feature Article: Page 17 · Topological Physics &amp; Gyro-Lattice</p>
           <p class="vfx-card-desc">
-            Align your camera with the target marker printed beside the article on Page 28.
-            A 3D polyhedral topological crystal hovers in physical space with gyro-rings, orbital physics, and rotation
-            controls.
+            An interactive 3D model anchors directly onto Page 17. Point your camera at Page 17 in the physical magazine or use the interactive 3D inspector below to explore the gyro-lattice geometry with orbit controls, rotation physics, and wireframe toggle.
           </p>
 
           <div class="vfx-actions-row">
-            <button class="btn-launch-ar" id="btnLaunch3dAR" type="button" aria-label="Launch Camera AR for 3D Model">
+            <button class="btn-launch-ar" id="btnLaunch3dAR" type="button" aria-label="Launch Camera AR for 3D Models">
               <span>Start Camera</span>
             </button>
             <button class="btn-preview-sim" id="btnSim3D" type="button"
-              aria-label="Open Non-AR Interactive Simulator for 3D Model">
+              aria-label="Open Interactive 3D Model Inspector">
               <span>Inspect 3D Model</span>
             </button>
           </div>
@@ -172,13 +222,199 @@
   </div>
 
   <!-- ========================================================================
-       FULLSCREEN AR CAMERA VIEWPORT & HUD STAGE (Activated upon launch)
+       FULLSCREEN AR CAMERA VIEWPORT & MINDAR STAGE (Activated upon launch)
        ======================================================================== -->
-  <div id="arContainer" role="dialog" aria-modal="true" aria-label="MindAR Augmented Reality Viewport">
-    <!-- Dynamic A-Frame Scene Container -->
-    <div class="aframe-stage-wrapper" id="aframeWrapper"></div>
+  <div id="arContainer" class="ar-container-fullscreen" role="dialog" aria-modal="true" aria-label="Wavelength Augmented Reality Camera Lens">
+    <!-- MindAR A-Frame Scene -->
+    <a-scene
+      id="mindarScene"
+      mindar-image="imageTargetSrc: ./mindar-targets/targets.mind; autoStart: false; uiScanning: no; uiError: no; uiLoading: no;"
+      embedded
+      color-space="sRGB"
+      renderer="colorManagement: true; physicallyCorrectLights: true;"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+    >
+      <a-assets timeout="8000">
+        <video id="wavyVideo" src="./assets/videos/wavy.mp4" preload="metadata" loop muted playsinline webkit-playsinline crossorigin="anonymous"></video>
+        <a-asset-item id="article3dModel" src="./assets/models/article-model.glb"></a-asset-item>
+      </a-assets>
 
-    <!-- AR HUD Overlay -->
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-light type="ambient" intensity="1.4" color="#ffffff"></a-light>
+      <a-light type="directional" intensity="0.9" position="1 2 2" color="#ffffff"></a-light>
+
+      <!-- Target 0: Cover Page 01 -->
+      <a-entity id="target0" mindar-image-target="targetIndex: 0">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/01.jpg" material="src: ./assets/pages/colour/01.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 1: Page 02 -->
+      <a-entity id="target1" mindar-image-target="targetIndex: 1">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/02.jpg" material="src: ./assets/pages/colour/02.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 2: Page 03 (Excluded from transformation) -->
+      <a-entity id="target2" mindar-image-target="targetIndex: 2"></a-entity>
+
+      <!-- Target 3: Page 04 -->
+      <a-entity id="target3" mindar-image-target="targetIndex: 3">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/04.jpg" material="src: ./assets/pages/colour/04.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 4: Page 05 -->
+      <a-entity id="target4" mindar-image-target="targetIndex: 4">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/05.jpg" material="src: ./assets/pages/colour/05.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 5: Page 06 -->
+      <a-entity id="target5" mindar-image-target="targetIndex: 5">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/06.jpg" material="src: ./assets/pages/colour/06.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 6: Page 07 -->
+      <a-entity id="target6" mindar-image-target="targetIndex: 6">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/07.jpg" material="src: ./assets/pages/colour/07.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 7: Page 08 -->
+      <a-entity id="target7" mindar-image-target="targetIndex: 7">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/08.jpg" material="src: ./assets/pages/colour/08.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 8: Page 09 -->
+      <a-entity id="target8" mindar-image-target="targetIndex: 8">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/09.jpg" material="src: ./assets/pages/colour/09.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 9: Page 10 -->
+      <a-entity id="target9" mindar-image-target="targetIndex: 9">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/10.jpg" material="src: ./assets/pages/colour/10.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 10: Page 11 -->
+      <a-entity id="target10" mindar-image-target="targetIndex: 10">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/11.jpg" material="src: ./assets/pages/colour/11.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 11: Page 12 -->
+      <a-entity id="target11" mindar-image-target="targetIndex: 11">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/12.jpg" material="src: ./assets/pages/colour/12.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 12: Page 13 -->
+      <a-entity id="target12" mindar-image-target="targetIndex: 12">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/13.jpg" material="src: ./assets/pages/colour/13.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 13: Page 14 -->
+      <a-entity id="target13" mindar-image-target="targetIndex: 13">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/14.jpg" material="src: ./assets/pages/colour/14.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 14: Page 15 -->
+      <a-entity id="target14" mindar-image-target="targetIndex: 14">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/15.jpg" material="src: ./assets/pages/colour/15.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 15: Page 16 -->
+      <a-entity id="target15" mindar-image-target="targetIndex: 15">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/16.jpg" material="src: ./assets/pages/colour/16.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 16: Page 17 (Feature Article — 3D Model Spatial Anchor) -->
+      <a-entity id="target16" mindar-image-target="targetIndex: 16">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/17.jpg" material="src: ./assets/pages/colour/17.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+        <a-entity id="arModelEntity" gltf-model="#article3dModel" position="0 0 0.25" scale="0.45 0.45 0.45" animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear;"></a-entity>
+      </a-entity>
+
+      <!-- Target 17: Page 18 (Integrated Motion Video Reveal — wavy.mp4) -->
+      <a-entity id="target17" mindar-image-target="targetIndex: 17">
+        <a-plane
+          class="video-overlay"
+          data-video="wavyVideo"
+          data-index="17"
+          src="#wavyVideo"
+          position="0 0 0"
+          height="1.5"
+          width="1.0605"
+          rotation="0 0 0"
+          material="src: #wavyVideo; shader: flat; side: double; transparent: true;"
+          video-overlay>
+        </a-plane>
+      </a-entity>
+
+      <!-- Target 18: Page 19 (Spread Right) -->
+      <a-entity id="target18" mindar-image-target="targetIndex: 18">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/19.jpg" material="src: ./assets/pages/colour/19.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 19: Page 20 -->
+      <a-entity id="target19" mindar-image-target="targetIndex: 19">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/20.jpg" material="src: ./assets/pages/colour/20.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 20: Page 21 -->
+      <a-entity id="target20" mindar-image-target="targetIndex: 21">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/21.jpg" material="src: ./assets/pages/colour/21.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 21: Page 22 -->
+      <a-entity id="target21" mindar-image-target="targetIndex: 21">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/22.jpg" material="src: ./assets/pages/colour/22.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 22: Page 23 -->
+      <a-entity id="target22" mindar-image-target="targetIndex: 23">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/23.jpg" material="src: ./assets/pages/colour/23.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 23: Page 24 -->
+      <a-entity id="target23" mindar-image-target="targetIndex: 24">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/24.jpg" material="src: ./assets/pages/colour/24.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 24: Page 25 -->
+      <a-entity id="target24" mindar-image-target="targetIndex: 24">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/25.jpg" material="src: ./assets/pages/colour/25.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 25: Page 26 -->
+      <a-entity id="target25" mindar-image-target="targetIndex: 26">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/26.jpg" material="src: ./assets/pages/colour/26.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 26: Page 27 -->
+      <a-entity id="target26" mindar-image-target="targetIndex: 26">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/27.jpg" material="src: ./assets/pages/colour/27.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 27: Page 28 -->
+      <a-entity id="target27" mindar-image-target="targetIndex: 27">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/28.jpg" material="src: ./assets/pages/colour/28.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 28: Page 29 -->
+      <a-entity id="target28" mindar-image-target="targetIndex: 28">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/29.jpg" material="src: ./assets/pages/colour/29.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 29: Page 30 -->
+      <a-entity id="target29" mindar-image-target="targetIndex: 29">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/30.jpg" material="src: ./assets/pages/colour/30.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 30: Page 31 -->
+      <a-entity id="target30" mindar-image-target="targetIndex: 30">
+        <a-plane class="ar-page-overlay" src="./assets/pages/colour/31.jpg" material="src: ./assets/pages/colour/31.jpg; shader: flat; side: double; transparent: true;" position="0 0 0" height="1.5" width="1.0605" rotation="0 0 0"></a-plane>
+      </a-entity>
+
+      <!-- Target 31: Page 32 (Excluded from transformation) -->
+      <a-entity id="target31" mindar-image-target="targetIndex: 31"></a-entity>
+    </a-scene>
+
+    <!-- AR HUD Overlay (Sits on top of the camera / 3D canvas) -->
     <div class="ar-hud-overlay">
       <!-- Top Control Bar -->
       <div class="ar-hud-top">
@@ -189,8 +425,12 @@
 
         <div class="ar-live-status-pill" id="liveStatusPill" aria-live="polite">
           <span class="status-indicator-dot" aria-hidden="true"></span>
-          <span id="liveStatusText">Initializing Camera...</span>
+          <span id="liveStatusText">Initializing AR Camera...</span>
         </div>
+
+        <button class="btn-flip-ar-cam" id="btnFlipCamera" type="button" aria-label="Toggle Mute">
+          <span id="arAudioLabel">Sound: OFF</span>
+        </button>
       </div>
 
       <!-- Scanning Reticle (Center Guide) -->
@@ -202,14 +442,10 @@
         <span class="reticle-laser-line"></span>
       </div>
 
-      <!-- Bottom Guidance Bar -->
+      <!-- Bottom Guidance -->
       <div class="ar-hud-bottom">
         <div class="ar-instruction-pill">
-          <span id="liveInstructionText">Align your camera over the printed magazine page</span>
-        </div>
-
-        <div class="ar-controls-pill-row">
-          <span class="ar-util-btn" id="arPageHint">Wavelength 47 · Print Companion</span>
+          <span id="liveInstructionText">Align camera over physical magazine page (Pages 01–31)</span>
         </div>
       </div>
     </div>
@@ -219,66 +455,108 @@
        NON-AR SIMULATORS / FALLBACK MODALS (Testable on desktop without print)
        ======================================================================== -->
 
-  <!-- Modal 1: Motion Video Preview Player -->
+  <!-- Modal 1: Pages 18 & 19 - B&W to Colour & Motion Video Preview Player -->
   <div class="sim-modal-backdrop" id="simColorModal" role="dialog" aria-modal="true" aria-labelledby="simColorTitle">
-    <div class="sim-modal-window">
+    <div class="sim-modal-window sim-modal-wide">
       <div class="sim-modal-header">
         <div>
-          <h3 class="sim-modal-title" id="simColorTitle">Chromatic Video Reveal Preview</h3>
+          <h3 class="sim-modal-title" id="simColorTitle">Pages 18 &amp; 19 · B&amp;W to Colour &amp; Motion Video</h3>
           <span
             style="font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;">
-            [Digital Companion Video: wavy.mp4]
+            [Chromatic Spread &amp; Digital Companion Video: wavy.mp4]
           </span>
         </div>
         <button class="btn-close-modal" id="btnCloseColorModal" type="button"
-          aria-label="Close Video Preview">✕</button>
+          aria-label="Close Preview">✕</button>
       </div>
 
       <div class="sim-modal-content">
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-          Preview the chromatic motion video overlay that blooms over the monochrome engraving on Page 14 when scanned
-          with the WebAR camera:
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+          Experience the complete transformation of Pages 18 &amp; 19: explore the interactive black-and-white to full colour split slider on the left, alongside the synchronized motion video reveal on the right.
         </p>
 
-        <!-- Video Player Preview Frame -->
-        <div class="video-preview-box" id="simVideoContainer">
-          <video id="simVideoPlayer" src="./assets/videos/wavy.mp4" playsinline loop preload="metadata"
-            class="sim-video-element" aria-label="Wavelength wavy.mp4 chromatic video preview">
-          </video>
-          <button class="video-overlay-play-btn" id="simVideoPlayOverlayBtn" type="button" aria-label="Play video">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <polygon points="6 4 20 12 6 20 6 4"></polygon>
-            </svg>
-          </button>
-        </div>
+        <!-- Side-by-Side Dual Showcase Grid -->
+        <div class="sim-dual-showcase-grid">
 
-        <!-- Video Scrubber Progress Row -->
-        <div class="video-scrubber-row">
-          <input type="range" class="video-scrubber-slider" id="videoTimelineSlider" min="0" max="100" value="0"
-            step="0.1" aria-label="Seek video position" />
-        </div>
+          <!-- Left Panel: Interactive B&W to Colour Split Comparison for Pages 18 & 19 -->
+          <div class="sim-showcase-panel">
+            <div class="sim-panel-header">
+              <span class="sim-panel-tag">PAGES 18 &amp; 19 SPREAD</span>
+              <h4 class="sim-panel-title">B&amp;W to Colour Reveal</h4>
+            </div>
 
-        <div class="video-viewer-toolbar">
-          <div class="video-toolbar-group">
-            <button class="btn-tool active" id="btnToggleVideoPlay" type="button">
-              <span id="videoPlayIcon">▶</span>
-              <span id="videoPlayLabel">Play Video</span>
-            </button>
-            <button class="btn-tool" id="btnToggleVideoMute" type="button">
-              <span id="videoMuteIcon">🔊</span>
-              <span id="videoMuteLabel">Sound: Unmuted</span>
-            </button>
-            <button class="btn-tool" id="btnRestartVideo" type="button">
-              <span>↺</span>
-              <span>Restart</span>
-            </button>
+            <div class="interactive-slider-box" id="modalSplitSlider" role="slider" tabindex="0"
+              aria-label="Pages 18 and 19 Black and White to Colour comparison slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+              <img class="sim-layer sim-layer-bw" src="./assets/images/spread-18-19-bw.jpg"
+                alt="Pages 18 and 19 monochrome print" />
+              <img class="sim-layer sim-layer-color" id="modalSplitColorLayer" src="./assets/images/spread-18-19.jpg"
+                alt="Pages 18 and 19 full colour spread" />
+              <div class="sim-slider-bar" id="modalSplitDivider" aria-hidden="true"></div>
+              <div class="sim-slider-knob" id="modalSplitThumb" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                  <polyline points="9 18 3 12 9 6" transform="translate(12, 0)"></polyline>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sim-slider-input-row" style="margin-top: 10px;">
+              <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); text-transform: uppercase;">
+                ← Drag slider to transform monochrome ink into colour →
+              </span>
+            </div>
           </div>
-          <div class="video-meta-info">
-            <span id="videoTimeDisplay"
-              style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);">
-              0:00 / 0:00
-            </span>
+
+          <!-- Right Panel: Motion Video Preview Player -->
+          <div class="sim-showcase-panel">
+            <div class="sim-panel-header">
+              <span class="sim-panel-tag">DIGITAL MOTION VIBE</span>
+              <h4 class="sim-panel-title">Motion Video Reveal</h4>
+            </div>
+
+            <!-- Video Player Preview Frame -->
+            <div class="video-preview-box" id="simVideoContainer">
+              <video id="simVideoPlayer" src="./assets/videos/wavy.mp4" playsinline loop preload="metadata"
+                class="sim-video-element" aria-label="Wavelength wavy.mp4 chromatic video preview">
+              </video>
+              <button class="video-overlay-play-btn" id="simVideoPlayOverlayBtn" type="button" aria-label="Play video">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Video Scrubber Progress Row -->
+            <div class="video-scrubber-row">
+              <input type="range" class="video-scrubber-slider" id="videoTimelineSlider" min="0" max="100" value="0"
+                step="0.1" aria-label="Seek video position" />
+            </div>
+
+            <div class="video-viewer-toolbar">
+              <div class="video-toolbar-group">
+                <button class="btn-tool active" id="btnToggleVideoPlay" type="button">
+                  <span id="videoPlayIcon">▶</span>
+                  <span id="videoPlayLabel">Play</span>
+                </button>
+                <button class="btn-tool" id="btnToggleVideoMute" type="button">
+                  <span id="videoMuteIcon">🔊</span>
+                  <span id="videoMuteLabel">Sound</span>
+                </button>
+                <button class="btn-tool" id="btnRestartVideo" type="button">
+                  <span>↺</span>
+                  <span>Restart</span>
+                </button>
+              </div>
+              <div class="video-meta-info">
+                <span id="videoTimeDisplay"
+                  style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);">
+                  0:00 / 0:00
+                </span>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -301,7 +579,7 @@
       <div class="sim-modal-content">
         <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
           Click or touch and drag to inspect the 3D model in 360 degrees.
-          Anchored to the printed marker on Page 28 during camera tracking.
+          Anchored directly to Page 17 during camera tracking.
         </p>
 
         <!-- 3D Polyhedral Orbit Canvas -->

@@ -19,123 +19,129 @@ const WAVELENGTH_CONFIG = {
   },
 
   // Audiobook Library Configuration
-  // Add, remove, or edit articles here.
-  // When real MP3/WAV files are placed in assets/audio/, update the `audioSrc` path.
+  // All 5 production audiobooks from the Wavelength archive
   audiobooks: [
     {
       id: "article-1",
       number: "01",
       title: "Patient Zero: Between Being 'Human' and Being 'Hero'",
       author: "Jai Gagaliya",
-      narrator: "AI Narration",
-      category: "Feature Essay",
+      narrator: "AI-Narration",
+      category: "Feature Article",
       description:
         "An introspective exploration of the psychological and ethical boundaries between humanity and heroism, examining the moral weight carried by those thrust into the vanguard of survival.",
       audioSrc: "./assets/audio/patient-zero.mp3",
       coverImage: "./assets/images/covers/cover-1.svg",
-      tag: "Feature Essay · Unabridged",
+      tag: "Feature Article · Unabridged",
       accentColor: "#d4b896"
     },
     {
       id: "article-2",
       number: "02",
-      title: "Neuroplasticity & The Synthetic Mind",
-      author: "Aria Chen & Julian Sola",
-      narrator: "AI Narration",
-      category: "Neuroscience & AI",
+      title: "Beyond the Axiom: Multipixel Imaging of Exoplanets with Solar Gravitational Lens",
+      author: "Wavelength Contributors",
+      narrator: "AI-Narration",
+      category: "Astrophysics & Optics",
       description:
-        "How neuromorphic silicon architectures mimic synaptic pruning and dendritic computation to build self-healing artificial neural networks.",
-      audioSrc: "./assets/audio/article-2.wav",
+        "Exploring multipixel resolved imaging of habitable exoplanets using the Sun as a gravitational lens, pushing the frontiers of interstellar astronomy.",
+      audioSrc: "./assets/audio/beyond-the-axiom.mp3",
       coverImage: "./assets/images/covers/cover-2.svg",
-      tag: "Cover Story",
+      tag: "Cover Story · Page 10",
       accentColor: "#d97746"
     },
     {
       id: "article-3",
       number: "03",
-      title: "Echoes of the Deep Biosphere",
-      author: "Tariq Al-Mansoor",
-      narrator: "AI Narration",
-      category: "Geomicrobiology",
+      title: "The Breaking Point: Cipher War & The Enigma Machine",
+      author: "Wavelength Contributors",
+      narrator: "AI-Narration",
+      category: "Cryptanalysis & History",
       description:
-        "Miles beneath oceanic crust, chemolithoautotrophic endoliths metabolize radiolytic hydrogen, rewriting the boundaries of extraterrestrial life search.",
-      audioSrc: "./assets/audio/article-3.wav",
+        "The mathematical breakthroughs, electromechanical decipherment, and strategic intelligence chess that broke the wartime Enigma machine.",
+      audioSrc: "./assets/audio/the-breaking-point-enigma.mp3",
       coverImage: "./assets/images/covers/cover-3.svg",
-      tag: "Field Dispatch",
+      tag: "Field Dispatch · Page 14",
       accentColor: "#93bd86"
     },
     {
       id: "article-4",
       number: "04",
-      title: "Gravitational Waves & Spacetime Curvature",
-      author: "Prof. Kenneth Sterling",
-      narrator: "AI Narration",
-      category: "Astrophysics",
+      title: "The Breaking Point: Cipher War & The Bombe Machine",
+      author: "Wavelength Contributors",
+      narrator: "AI-Narration",
+      category: "Cryptanalysis & Decipherment",
       description:
-        "Next-generation laser interferometers measuring sub-proton spacetime strain from inspiraling binary neutron stars and primordial black holes.",
-      audioSrc: "./assets/audio/article-4.wav",
+        "The electromechanical Bombe developed by Alan Turing and Gordon Welchman to systematically exploit German cribs and crack the Enigma naval ciphers.",
+      audioSrc: "./assets/audio/the-breaking-point-bombe.mp3",
       coverImage: "./assets/images/covers/cover-4.svg",
-      tag: "Theoretical Physics",
+      tag: "Historical Cipher · Page 15",
       accentColor: "#c5913e"
     },
     {
       id: "article-5",
       number: "05",
-      title: "Synthetic Biology & Algorithmic Genomes",
-      author: "Dr. Maya Lindqvist",
-      narrator: "AI Narration",
-      category: "Genomic Computation",
+      title: "Patient Zero: Between Being 'Hero' and Being 'Human' (Alternate Narration)",
+      author: "Jai Gagaliya",
+      narrator: "AI-Narration",
+      category: "Psychological Ethics",
       description:
-        "Designing synthetic genetic logic gates, cellular state machines, and DNA-based cryptographic storage for distributed biochemical processing.",
-      audioSrc: "./assets/audio/article-5.wav",
+        "Alternate director's cut narration exploring the personal emotional toll, solitude, and moral imperative behind the frontline crucible.",
+      audioSrc: "./assets/audio/patient-zero-alt.mp3",
       coverImage: "./assets/images/covers/cover-5.svg",
-      tag: "Biotechnology",
+      tag: "Special Edition · Page 18",
       accentColor: "#e0a85b"
     }
   ],
 
+  // Magazine Pages & Transformation Map
+  // Pages 3 and 32 are excluded from transformation
+  pages: {
+    totalPages: 32,
+    excludedFromTransformation: [3, 32],
+    transformablePages: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+    coverPage: 1
+  },
+
   // MindAR & VFX Experience Configuration
   vfx: {
     // Compiled MindAR target file containing all target images bundled together
-    // Compile using: https://hiukim.github.io/mind-ar-js-doc/tools/compile
     targetsFile: "./assets/targets/targets.mind",
-    isTargetFileCompiled: false, // Set to true once you have compiled and uploaded your real targets.mind
+    isTargetFileCompiled: true,
 
     // Experience 1: Black & White to Colour Artwork Reveal & Video Motion
-    // Triggered when camera detects the printed B&W artwork in the magazine
+    // Pages 18 & 19 feature spread with video alongside B&W to Colour
     experience1_colorReveal: {
-      targetIndex: 0, // Target index inside targets.mind (0-indexed)
+      targetIndex: 0,
       title: "From Black & White to Colour",
-      articleTitle: "Chromatic Flux Resonator",
-      magazinePage: "Page 14 · Feature Spread",
+      articleTitle: "Pages 18 & 19 Spread & Motion Video Reveal",
+      magazinePage: "Pages 18 & 19 · Feature Spread",
       description:
-        "Our print magazine is published in crisp monochrome. Hold your camera over the Page 14 artwork to witness the dynamic full-motion chromatic video reveal.",
+        "Pages 18 and 19 feature a full monochrome-to-colour chromatic transformation alongside an integrated motion video reveal. Align your camera over the spread to activate the animated visual sequence directly on the page.",
       
       // Graphic & Video assets
-      printedImage: "./assets/images/bw-print-sample.svg",
-      colorImage: "./assets/images/color-overlay-sample.svg",
+      printedImage: "./assets/images/spread-18-19-bw.jpg",
+      colorImage: "./assets/images/spread-18-19.jpg",
       videoPath: "./assets/videos/wavy.mp4",
       
       // Overlay alignment settings
-      aspectRatio: { width: 1.0, height: 1.0 }, // 1:1 square
-      targetWidth: 1.0,  // A-Frame plane width in AR coordinate space
-      targetHeight: 1.0, // A-Frame plane height
+      aspectRatio: { width: 1.414, height: 1.0 },
+      targetWidth: 1.414,
+      targetHeight: 1.0,
       scale: { x: 1.0, y: 1.0, z: 1.0 },
-      position: { x: 0, y: 0, z: 0.01 }, // slightly elevated to avoid Z-fighting
+      position: { x: 0, y: 0, z: 0.01 },
       rotation: { x: 0, y: 0, z: 0 },
-      revealDuration: 1.2, // seconds for opacity transition
+      revealDuration: 1.2,
       accentColor: "#d4b896"
     },
 
     // Experience 2: Article with a 3D Model
-    // Triggered when camera detects the printed marker alongside Article 05
     experience2_3dModel: {
-      targetIndex: 1, // Second target inside targets.mind
+      targetIndex: 16,
       title: "Explore in 3D",
       articleTitle: "Topological Matter: The Gyro-Lattice",
-      magazinePage: "Page 28 · Speculative Engineering",
+      magazinePage: "Page 17 · Speculative Engineering",
       description:
-        "Anchor an interactive 3D model directly atop the printed page marker. Examine topological orbital crystal geometry hovering in your space.",
+        "Anchor an interactive 3D model directly atop the printed page. Examine topological orbital crystal geometry hovering in your space.",
       
       // Marker image printed in magazine
       markerImage: "./assets/images/marker-print-sample.svg",

@@ -629,8 +629,10 @@ header.site-header {
 /* Interactive Viewer (1:1 Aspect Ratio matching SVG drawings) */
 .specimen-viewer {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1240 / 1754;
   width: 100%;
+  max-height: 620px;
+  margin: 0 auto;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-xs);
   overflow: hidden;
@@ -654,7 +656,7 @@ header.site-header {
 .split-layer {
   position: absolute;
   inset: 0;
-  background-size: 100% 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   pointer-events: none;
@@ -663,12 +665,12 @@ header.site-header {
 }
 
 .split-layer-bw {
-  background-image: url("../assets/images/bw-print-sample.svg");
+  background-image: url("../assets/pages/black/01.jpg");
   filter: contrast(105%);
 }
 
 .split-layer-color {
-  background-image: url("../assets/images/color-overlay-sample.svg");
+  background-image: url("../assets/pages/colour/01.jpg");
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
   will-change: clip-path;
 }
@@ -1304,13 +1306,12 @@ header.site-header {
 
 .masthead-role-label {
   display: block;
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 16.5px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .masthead-lead-name {
@@ -1325,8 +1326,8 @@ header.site-header {
 
 .masthead-columns-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 52px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
 }
 
 .masthead-col {

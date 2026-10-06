@@ -19,5 +19,5 @@
   <circle cx="300" cy="200" r="14" fill="url(#goldGrad)"/>
   <circle cx="300" cy="200" r="28" fill="#d4b896" opacity="0.2" filter="blur(4px)"/>
   <text x="30" y="365" font-family="'Playfair Display', Georgia, serif" font-size="24" fill="#f3f0e9" font-weight="500">Patient Zero</text>
-  <text x="30" y="385" font-family="'DM Mono', monospace" font-size="10" fill="#d4b896" letter-spacing="0.15em">ARTICLE 01 · FEATURE ESSAY</text>
+  <text x="30" y="385" font-family="'DM Mono', monospace" font-size="10" fill="#d4b896" letter-spacing="0.15em">ARTICLE 01 · FEATURE ARTICLE</text>
 </svg>

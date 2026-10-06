@@ -246,25 +246,158 @@
    AR FULLSCREEN CAMERA VIEWPORT & HUD STAGE
    ========================================================================== */
 
-#arContainer {
+#arContainer,
+.ar-container-fullscreen {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 9999;
-  background: #000000;
+  background: transparent;
   display: none;
   overflow: hidden;
 }
 
-#arContainer.active {
+#arContainer.active,
+.ar-container-fullscreen.active {
   display: block;
 }
 
-.aframe-stage-wrapper {
+#arContainer a-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+}
+
+#arContainer .ar-hud-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* AR Viewfinder Stage & Page Hologram Layer */
+.ar-viewfinder-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 80px 20px 140px;
+  box-sizing: border-box;
+}
+
+.ar-page-overlay-box {
+  position: relative;
+  width: min(84vw, 520px);
+  aspect-ratio: 1240 / 1754;
+  max-height: 65vh;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  border: 1.5px solid rgba(212, 184, 150, 0.5);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.ar-page-overlay-box.is-spread {
+  aspect-ratio: 2480 / 1754;
+  width: min(92vw, 780px);
+}
+
+.ar-overlay-color-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  transition: opacity 0.3s ease;
+  will-change: clip-path;
+  pointer-events: none;
+}
+
+.ar-video-overlay-wrap {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ar-video-overlay-wrap.active {
+  display: flex;
+}
+
+.ar-video-overlay-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ar-video-overlay-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(30, 22, 18, 0.9);
+  color: var(--gold);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--accent);
+}
+
+.ar-3d-overlay-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 12;
+  pointer-events: auto;
+}
+
+.ar-3d-overlay-canvas.active {
+  display: block;
+}
+
+.ar-split-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  z-index: 15;
+}
+
+.ar-split-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  border: 2px solid #ffffff;
+  pointer-events: none;
+  z-index: 16;
 }
 
 /* AR Camera HUD Overlay */
@@ -382,6 +515,33 @@
   transform: scale(0.92);
 }
 
+.btn-flip-ar-cam {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  background: rgba(30, 22, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all var(--transition-fast);
+}
+
+.btn-flip-ar-cam:hover {
+  background: var(--accent);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
 /* Bottom HUD Guide */
 .ar-hud-bottom {
   text-align: center;
@@ -390,6 +550,9 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .ar-instruction-pill {
@@ -397,7 +560,7 @@
   background: rgba(30, 22, 18, 0.92);
   border: 1px solid var(--accent);
   color: #f7eedc;
-  padding: 8px 22px;
+  padding: 7px 20px;
   border-radius: var(--radius-full);
   font-family: "DM Mono", monospace;
   font-size: 11px;
@@ -406,23 +569,101 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-.ar-controls-pill-row {
+/* Live AR Wipe Slider Bar */
+.ar-slider-control-row {
   display: flex;
-  justify-content: center;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 22, 18, 0.92);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(212, 184, 150, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: min(92vw, 480px);
+  box-sizing: border-box;
 }
 
-.ar-util-btn {
-  display: inline-block;
-  background: rgba(30, 22, 18, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #dfcaa7;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
+.ar-slider-label {
   font-family: "DM Mono", monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  color: #dfcaa7;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.ar-live-slider {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+  height: 4px;
+}
+
+.ar-quick-reveal-btn {
+  background: var(--accent);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ar-quick-reveal-btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+/* Magazine Page Quick-Selector Carousel (All pages 01 to 31) */
+.ar-page-picker-carousel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  max-width: 100%;
+  width: 100%;
+  padding: 8px 10px 4px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.ar-page-picker-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+.ar-page-picker-carousel::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.ar-page-pill {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(30, 22, 18, 0.88);
+  border: 1px solid rgba(212, 184, 150, 0.3);
+  color: #dfcaa7;
+  font-family: "DM Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.ar-page-pill:hover,
+.ar-page-pill.active {
+  background: var(--accent);
+  border-color: #ffffff;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(140, 94, 53, 0.6);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================
@@ -458,6 +699,56 @@
   flex-direction: column;
   position: relative;
   z-index: 10001;
+}
+
+.sim-modal-window.sim-modal-wide {
+  width: min(1040px, calc(100% - 24px));
+}
+
+.sim-dual-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+@media (max-width: 860px) {
+  .sim-dual-showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}
+
+.sim-showcase-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--surface-paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 16px;
+}
+
+.sim-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sim-panel-tag {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sim-panel-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
 }
 
 .sim-modal-header {
@@ -508,7 +799,7 @@
 .interactive-slider-box {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 11;
   border-radius: var(--radius-xs);
   border: 1.5px solid var(--border-strong);
   background: #111111;
@@ -524,17 +815,13 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
   pointer-events: none;
-}
-
-.sim-layer-bw {
-  background-image: url("../assets/images/bw-print-sample.svg");
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .sim-layer-color {
-  background-image: url("../assets/images/color-overlay-sample.svg");
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
   will-change: clip-path;
 }
