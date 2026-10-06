@@ -111,7 +111,7 @@ const WAVELENGTH_CONFIG = {
     // Experience 1: Black & White to Colour Artwork Reveal & Video Motion
     // Pages 18 & 19 feature spread with video alongside B&W to Colour
     experience1_colorReveal: {
-      targetIndex: 0,
+      targetIndex: 16,
       title: "From Black & White to Colour",
       articleTitle: "Pages 18 & 19 Spread & Motion Video Reveal",
       magazinePage: "Pages 18 & 19 · Feature Spread",
@@ -136,7 +136,7 @@ const WAVELENGTH_CONFIG = {
 
     // Experience 2: Article with a 3D Model
     experience2_3dModel: {
-      targetIndex: 16,
+      targetIndex: 15,
       title: "Explore in 3D",
       articleTitle: "Topological Matter: The Gyro-Lattice",
       magazinePage: "Page 17 · Speculative Engineering",

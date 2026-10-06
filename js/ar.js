@@ -83,21 +83,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Attach event listeners to all 32 targets
-  for (let i = 0; i < 32; i++) {
-    const targetEntity = document.getElementById("target" + i);
-    if (!targetEntity) continue;
+  // Target-to-page mapping matching compiled targets.mind (31 targets, indices 0-30)
+  const TARGET_PAGE_MAP = [
+    { targetIndex: 0, page: "01", name: "Cover Page 01", type: "color" },
+    { targetIndex: 1, page: "02", name: "Page 02", type: "color" },
+    { targetIndex: 2, page: "04", name: "Page 04", type: "color" },
+    { targetIndex: 3, page: "05", name: "Page 05", type: "color" },
+    { targetIndex: 4, page: "06", name: "Page 06", type: "color" },
+    { targetIndex: 5, page: "07", name: "Page 07", type: "color" },
+    { targetIndex: 6, page: "08", name: "Page 08", type: "color" },
+    { targetIndex: 7, page: "09", name: "Page 09", type: "color" },
+    { targetIndex: 8, page: "10", name: "Page 10", type: "color" },
+    { targetIndex: 9, page: "11", name: "Page 11", type: "color" },
+    { targetIndex: 10, page: "12", name: "Page 12", type: "color" },
+    { targetIndex: 11, page: "13", name: "Page 13", type: "color" },
+    { targetIndex: 12, page: "14", name: "Page 14", type: "color" },
+    { targetIndex: 13, page: "15", name: "Page 15", type: "color" },
+    { targetIndex: 14, page: "16", name: "Page 16", type: "color" },
+    { targetIndex: 15, page: "17", name: "Page 17", type: "model" },
+    { targetIndex: 16, page: "18", name: "Pages 18 & 19", type: "video" },
+    { targetIndex: 17, page: "19", name: "Page 19", type: "color" },
+    { targetIndex: 18, page: "20", name: "Page 20", type: "color" },
+    { targetIndex: 19, page: "21", name: "Page 21", type: "color" },
+    { targetIndex: 20, page: "22", name: "Page 22", type: "color" },
+    { targetIndex: 21, page: "23", name: "Page 23", type: "color" },
+    { targetIndex: 22, page: "24", name: "Page 24", type: "color" },
+    { targetIndex: 23, page: "25", name: "Page 25", type: "color" },
+    { targetIndex: 24, page: "26", name: "Page 26", type: "color" },
+    { targetIndex: 25, page: "27", name: "Page 27", type: "color" },
+    { targetIndex: 26, page: "28", name: "Page 28", type: "color" },
+    { targetIndex: 27, page: "29", name: "Page 29", type: "color" },
+    { targetIndex: 28, page: "30", name: "Page 30", type: "color" },
+    { targetIndex: 29, page: "31", name: "Page 31", type: "color" },
+    { targetIndex: 30, page: "32", name: "Page 32", type: "excluded" }
+  ];
 
-    const pageNum = (i + 1) < 10 ? "0" + (i + 1) : "" + (i + 1);
+  // Attach event listeners to all targets
+  TARGET_PAGE_MAP.forEach((item) => {
+    const targetEntity = document.getElementById("target" + item.targetIndex);
+    if (!targetEntity) return;
 
     targetEntity.addEventListener("targetFound", () => {
-      console.log(`>>> TARGET ${i} FOUND: Page ${pageNum} <<<`);
-      if (i === 16) {
+      console.log(`>>> TARGET ${item.targetIndex} FOUND: Page ${item.page} (${item.type}) <<<`);
+      if (item.type === "model") {
         setStatus("✓ PAGE 17 DETECTED", "Projecting Interactive 3D Model Anchor Over Page 17", true);
-      } else if (i === 17) {
+      } else if (item.type === "video") {
         setStatus("✓ PAGES 18 & 19 DETECTED", "Playing Motion Video Reveal in AR", true);
-      } else {
-        setStatus(`✓ PAGE ${pageNum} DETECTED`, "Full Chromatic Art Restored Over Monochrome Ink", true);
+      } else if (item.type !== "excluded") {
+        setStatus(`✓ PAGE ${item.page} DETECTED`, "Full Chromatic Art Restored Over Monochrome Ink", true);
       }
 
       // If this target has a video-overlay component, call show()
@@ -108,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     targetEntity.addEventListener("targetLost", () => {
-      console.log(`>>> TARGET ${i} LOST <<<`);
+      console.log(`>>> TARGET ${item.targetIndex} LOST <<<`);
       setStatus("Scanning Magazine...", "Point camera at any physical magazine page", false);
 
       const overlay = targetEntity.querySelector("[video-overlay]");
@@ -116,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.components["video-overlay"].hide();
       }
     });
-  }
+  });
 
   // Launch MindAR Camera Session
   function launchAR() {
